@@ -142,14 +142,14 @@ Public Module DatabaseHelper
         EnsureQuestionsTable()
     End Sub
 
-    Public Function GetQuestionsByStep(step As Integer) As List(Of QuestionModel)
+    Public Function GetQuestionsByStep(stepIndex As Integer) As List(Of QuestionModel)
         Dim list As New List(Of QuestionModel)()
         Try
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
                 Dim sql As String = "SELECT id, qkey, prompt, qtype, options, qstep, active FROM questions WHERE qstep = @step AND active = 1 ORDER BY id"
                 Using cmd As New MySqlCommand(sql, conn)
-                    cmd.Parameters.AddWithValue("@step", step)
+                    cmd.Parameters.AddWithValue("@step", stepIndex)
                     Using rdr As MySqlDataReader = cmd.ExecuteReader()
                         While rdr.Read()
                             Dim m As New QuestionModel()

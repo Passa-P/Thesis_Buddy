@@ -74,7 +74,7 @@ Partial Class Question_Form
         ' LabelTitle
         ' 
         LabelTitle.AutoSize = True
-        LabelTitle.Font = New Font("Segoe UI Semibold", 18.0F, FontStyle.Bold)
+        LabelTitle.Font = New Font("Segoe UI Semibold", 18F, FontStyle.Bold)
         LabelTitle.ForeColor = Color.FromArgb(CByte(72), CByte(233), CByte(223))
         LabelTitle.Location = New Point(36, 18)
         LabelTitle.Name = "LabelTitle"
@@ -85,24 +85,24 @@ Partial Class Question_Form
         ' LabelSubtitle
         ' 
         LabelSubtitle.AutoSize = True
-        LabelSubtitle.Font = New Font("Segoe UI", 10.0F, FontStyle.Regular)
+        LabelSubtitle.Font = New Font("Segoe UI", 10F)
         LabelSubtitle.ForeColor = Color.FromArgb(CByte(160), CByte(160), CByte(160))
         LabelSubtitle.Location = New Point(37, 58)
         LabelSubtitle.Name = "LabelSubtitle"
-        LabelSubtitle.Size = New Size(136, 19)
+        LabelSubtitle.Size = New Size(125, 19)
         LabelSubtitle.TabIndex = 4
-        LabelSubtitle.Text = "Dapatkan jawapan:"
+        LabelSubtitle.Text = "Dapatkan jawaban:"
         ' 
         ' FlowLayoutPanelQuestions
         ' 
         FlowLayoutPanelQuestions.AutoScroll = True
         FlowLayoutPanelQuestions.FlowDirection = FlowDirection.TopDown
-        FlowLayoutPanelQuestions.WrapContents = False
-        FlowLayoutPanelQuestions.Padding = New Padding(8)
         FlowLayoutPanelQuestions.Location = New Point(36, 80)
         FlowLayoutPanelQuestions.Name = "FlowLayoutPanelQuestions"
+        FlowLayoutPanelQuestions.Padding = New Padding(8)
         FlowLayoutPanelQuestions.Size = New Size(388, 320)
         FlowLayoutPanelQuestions.TabIndex = 5
+        FlowLayoutPanelQuestions.WrapContents = False
         ' 
         ' PanelNav
         ' 
@@ -111,13 +111,13 @@ Partial Class Question_Form
         PanelNav.Size = New Size(388, 40)
         PanelNav.TabIndex = 7
         ' 
-        ' ButtonSubmit (hidden - dynamic nav used)
+        ' ButtonSubmit
         ' 
         ButtonSubmit.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
         ButtonSubmit.FlatAppearance.BorderColor = Color.White
         ButtonSubmit.FlatAppearance.BorderSize = 2
         ButtonSubmit.FlatStyle = FlatStyle.Flat
-        ButtonSubmit.Font = New Font("Segoe UI Semibold", 11.0F, FontStyle.Bold)
+        ButtonSubmit.Font = New Font("Segoe UI Semibold", 11F, FontStyle.Bold)
         ButtonSubmit.ForeColor = Color.White
         ButtonSubmit.Location = New Point(304, 392)
         ButtonSubmit.Name = "ButtonSubmit"
@@ -127,13 +127,13 @@ Partial Class Question_Form
         ButtonSubmit.UseVisualStyleBackColor = False
         ButtonSubmit.Visible = False
         ' 
-        ' ButtonCancel (hidden - dynamic nav used)
+        ' ButtonCancel
         ' 
         ButtonCancel.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
         ButtonCancel.FlatAppearance.BorderColor = Color.White
         ButtonCancel.FlatAppearance.BorderSize = 2
         ButtonCancel.FlatStyle = FlatStyle.Flat
-        ButtonCancel.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
+        ButtonCancel.Font = New Font("Segoe UI Semibold", 9F, FontStyle.Bold)
         ButtonCancel.ForeColor = Color.White
         ButtonCancel.Location = New Point(36, 392)
         ButtonCancel.Name = "ButtonCancel"
@@ -145,13 +145,13 @@ Partial Class Question_Form
         ' 
         ' Question_Form
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 17.0F)
+        AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(18), CByte(24), CByte(31))
         ClientSize = New Size(900, 520)
         Controls.Add(PanelCard)
         Controls.Add(PanelLeft)
-        Font = New Font("Segoe UI", 10.0F)
+        Font = New Font("Segoe UI", 10F)
         FormBorderStyle = FormBorderStyle.FixedSingle
         MaximizeBox = False
         Name = "Question_Form"

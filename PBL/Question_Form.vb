@@ -113,11 +113,11 @@ Public Class Question_Form
         Return w
     End Function
 
-    Private Sub ShowQuestionsForStep(step As Integer)
+    Private Sub ShowQuestionsForStep(stepIndex As Integer)
         FlowLayoutPanelQuestions.Controls.Clear()
         PanelNav.Controls.Clear()
 
-        Dim questions = DatabaseHelper.GetQuestionsByStep(step)
+        Dim questions = DatabaseHelper.GetQuestionsByStep(stepIndex)
         If questions Is Nothing OrElse questions.Count = 0 Then
             Dim lbl As New Label With {.Text = "Tidak ada pertanyaan di langkah ini.", .ForeColor = Color.LightGray, .AutoSize = True}
             FlowLayoutPanelQuestions.Controls.Add(lbl)
@@ -264,7 +264,7 @@ Public Class Question_Form
         End If
 
         ' Navigation buttons
-        If step > 1 Then
+        If stepIndex > 1 Then
             Dim btnPrev As New Button()
             btnPrev.Text = "Previous"
             btnPrev.Width = 120
@@ -276,7 +276,7 @@ Public Class Question_Form
             PanelNav.Controls.Add(btnPrev)
         End If
 
-        Dim nextQuestions = DatabaseHelper.GetQuestionsByStep(step + 1)
+        Dim nextQuestions = DatabaseHelper.GetQuestionsByStep(stepIndex + 1)
         If nextQuestions IsNot Nothing AndAlso nextQuestions.Count > 0 Then
             Dim btnNext As New Button()
             btnNext.Text = "Next"
