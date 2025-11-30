@@ -119,7 +119,7 @@ Public Module DatabaseHelper
                                 "prompt TEXT, " & _
                                 "qtype VARCHAR(50), " & _
                                 "options TEXT, " & _
-                                "step INT, " & _
+                                "qstep INT, " & _
                                 "active TINYINT(1) DEFAULT 1) ENGINE=InnoDB;"
             Using cmd As New MySqlCommand(sql, conn)
                 cmd.ExecuteNonQuery()
@@ -147,7 +147,7 @@ Public Module DatabaseHelper
         Try
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
-                Dim sql As String = "SELECT id, qkey, prompt, qtype, options, step, active FROM questions WHERE step = @step AND active = 1 ORDER BY id"
+                Dim sql As String = "SELECT id, qkey, prompt, qtype, options, qstep, active FROM questions WHERE qstep = @step AND active = 1 ORDER BY id"
                 Using cmd As New MySqlCommand(sql, conn)
                     cmd.Parameters.AddWithValue("@step", step)
                     Using rdr As MySqlDataReader = cmd.ExecuteReader()
@@ -158,7 +158,7 @@ Public Module DatabaseHelper
                             m.Prompt = Convert.ToString(rdr("prompt"))
                             m.QType = Convert.ToString(rdr("qtype"))
                             m.Options = Convert.ToString(rdr("options"))
-                            m.Step = Convert.ToInt32(rdr("step"))
+                            m.QStep = Convert.ToInt32(rdr("qstep"))
                             m.Active = Convert.ToInt32(rdr("active")) = 1
                             list.Add(m)
                         End While

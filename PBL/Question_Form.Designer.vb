@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Question_Form
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -26,6 +26,7 @@ Partial Class Question_Form
         PictureLogo = New PictureBox()
         PanelCard = New Panel()
         LabelTitle = New Label()
+        LabelSubtitle = New Label()
         FlowLayoutPanelQuestions = New FlowLayoutPanel()
         PanelNav = New Panel()
         ButtonSubmit = New Button()
@@ -60,6 +61,7 @@ Partial Class Question_Form
         ' 
         PanelCard.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
         PanelCard.Controls.Add(LabelTitle)
+        PanelCard.Controls.Add(LabelSubtitle)
         PanelCard.Controls.Add(FlowLayoutPanelQuestions)
         PanelCard.Controls.Add(PanelNav)
         PanelCard.Controls.Add(ButtonSubmit)
@@ -80,16 +82,27 @@ Partial Class Question_Form
         LabelTitle.TabIndex = 3
         LabelTitle.Text = "Sistem Pakar ThesisBuddy"
         ' 
+        ' LabelSubtitle
+        ' 
+        LabelSubtitle.AutoSize = True
+        LabelSubtitle.Font = New Font("Segoe UI", 10.0F, FontStyle.Regular)
+        LabelSubtitle.ForeColor = Color.FromArgb(CByte(160), CByte(160), CByte(160))
+        LabelSubtitle.Location = New Point(37, 58)
+        LabelSubtitle.Name = "LabelSubtitle"
+        LabelSubtitle.Size = New Size(136, 19)
+        LabelSubtitle.TabIndex = 4
+        LabelSubtitle.Text = "Dapatkan jawapan:"
+        ' 
         ' FlowLayoutPanelQuestions
         ' 
         FlowLayoutPanelQuestions.AutoScroll = True
         FlowLayoutPanelQuestions.FlowDirection = FlowDirection.TopDown
         FlowLayoutPanelQuestions.WrapContents = False
         FlowLayoutPanelQuestions.Padding = New Padding(8)
-        FlowLayoutPanelQuestions.Location = New Point(36, 64)
+        FlowLayoutPanelQuestions.Location = New Point(36, 80)
         FlowLayoutPanelQuestions.Name = "FlowLayoutPanelQuestions"
         FlowLayoutPanelQuestions.Size = New Size(388, 320)
-        FlowLayoutPanelQuestions.TabIndex = 4
+        FlowLayoutPanelQuestions.TabIndex = 5
         ' 
         ' PanelNav
         ' 
@@ -109,7 +122,7 @@ Partial Class Question_Form
         ButtonSubmit.Location = New Point(304, 392)
         ButtonSubmit.Name = "ButtonSubmit"
         ButtonSubmit.Size = New Size(120, 40)
-        ButtonSubmit.TabIndex = 5
+        ButtonSubmit.TabIndex = 6
         ButtonSubmit.Text = "Submit"
         ButtonSubmit.UseVisualStyleBackColor = False
         ButtonSubmit.Visible = False
@@ -125,7 +138,7 @@ Partial Class Question_Form
         ButtonCancel.Location = New Point(36, 392)
         ButtonCancel.Name = "ButtonCancel"
         ButtonCancel.Size = New Size(140, 40)
-        ButtonCancel.TabIndex = 6
+        ButtonCancel.TabIndex = 7
         ButtonCancel.Text = "Cancel"
         ButtonCancel.UseVisualStyleBackColor = False
         ButtonCancel.Visible = False
@@ -156,8 +169,22 @@ Partial Class Question_Form
     Friend WithEvents PictureLogo As PictureBox
     Friend WithEvents PanelCard As Panel
     Friend WithEvents LabelTitle As Label
+    Friend WithEvents LabelSubtitle As Label
     Friend WithEvents FlowLayoutPanelQuestions As FlowLayoutPanel
     Friend WithEvents PanelNav As Panel
     Friend WithEvents ButtonSubmit As Button
     Friend WithEvents ButtonCancel As Button
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class
