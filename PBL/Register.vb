@@ -1,17 +1,31 @@
 Imports System.Drawing.Drawing2D
+Imports System.IO
 
 Public Class Register
 
     Private Sub Register_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' locate the panel by name to avoid designer sync issues
         Dim found = Me.Controls.Find("PanelCard", True)
         If found.Length > 0 Then
             Dim panelCard As Panel = DirectCast(found(0), Panel)
-            panelCard.Left = (Me.ClientSize.Width - panelCard.Width) \ 2
-            panelCard.Top = (Me.ClientSize.Height - panelCard.Height) \ 2
+
+            ' If a left branding panel exists, place the card to the right of it with a margin
+            Dim leftFound = Me.Controls.Find("PanelLeft", True)
+            If leftFound.Length > 0 Then
+                Dim panelLeft As Panel = DirectCast(leftFound(0), Panel)
+                Dim margin As Integer = 30
+                panelCard.Left = panelLeft.Right + margin
+                ' vertically center within the form
+                panelCard.Top = (Me.ClientSize.Height - panelCard.Height) \ 2
+            Else
+                ' fallback to centering the card in the form
+                panelCard.Left = (Me.ClientSize.Width - panelCard.Width) \ 2
+                panelCard.Top = (Me.ClientSize.Height - panelCard.Height) \ 2
+            End If
 
             ' Rounded corners for card
             Try
-                Dim r As Integer = 12
+                Dim r As Integer = 16
                 Dim rect As Rectangle = panelCard.ClientRectangle
                 Dim path As New GraphicsPath()
                 path.AddArc(rect.X, rect.Y, r, r, 180, 90)
@@ -21,6 +35,7 @@ Public Class Register
                 path.CloseFigure()
                 panelCard.Region = New Region(path)
             Catch ex As Exception
+                ' ignore on failure
             End Try
         End If
 
@@ -28,11 +43,32 @@ Public Class Register
         SetPlaceholder(TextBoxUsername, "Username")
         SetPlaceholderPassword(TextBoxPassword, "Password")
         SetPlaceholderPassword(TextBoxConfirm, "Confirm Password")
+
+        ' Initial button state (match Login)
+        ButtonRegister.FlatAppearance.BorderColor = Color.FromArgb(3, 58, 115)
+        ButtonBack.FlatAppearance.BorderColor = Color.FromArgb(3, 58, 115)
+
+        ' Load logo into PictureLogo if image file exists (place logo file in project output folder)
+        Try
+            Dim candidates = New String() {Path.Combine(Application.StartupPath, "thesisbuddy_logo.png"), Path.Combine(Application.StartupPath, "logo.png"), Path.Combine(Application.StartupPath, "assets", "logo.png")}
+            For Each p As String In candidates
+                If File.Exists(p) Then
+                    Using src As Image = Image.FromFile(p)
+                        PictureLogo.Image = New Bitmap(src)
+                    End Using
+                    PictureLogo.SizeMode = PictureBoxSizeMode.Zoom
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ' ignore load errors
+        End Try
     End Sub
 
     Private Sub SetPlaceholder(tb As TextBox, placeholder As String)
         If String.IsNullOrEmpty(tb.Text) Then
             tb.Text = placeholder
+            tb.Tag = placeholder
             tb.ForeColor = Color.Gray
         End If
         RemoveHandler tb.GotFocus, AddressOf RemovePlaceholder
@@ -44,6 +80,7 @@ Public Class Register
     Private Sub SetPlaceholderPassword(tb As TextBox, placeholder As String)
         If String.IsNullOrEmpty(tb.Text) Then
             tb.Text = placeholder
+            tb.Tag = placeholder
             tb.ForeColor = Color.Gray
             tb.PasswordChar = ControlChars.NullChar
         End If
@@ -64,7 +101,8 @@ Public Class Register
     Private Sub ApplyPlaceholder(sender As Object, e As EventArgs)
         Dim tb = DirectCast(sender, TextBox)
         If String.IsNullOrWhiteSpace(tb.Text) Then
-            ' placeholder re-applied by SetPlaceholder caller
+            tb.Text = Convert.ToString(tb.Tag)
+            tb.ForeColor = Color.Gray
         End If
     End Sub
 
@@ -80,7 +118,7 @@ Public Class Register
     Private Sub ApplyPasswordPlaceholder(sender As Object, e As EventArgs)
         Dim tb = DirectCast(sender, TextBox)
         If String.IsNullOrWhiteSpace(tb.Text) Then
-            tb.Text = "Confirm Password"
+            tb.Text = Convert.ToString(tb.Tag)
             tb.ForeColor = Color.Gray
             tb.PasswordChar = ControlChars.NullChar
         End If
@@ -121,11 +159,48 @@ Public Class Register
         Me.Close()
     End Sub
 
+    Private Sub CheckBoxShow_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxShow.CheckedChanged
+        If TextBoxPassword.ForeColor = Color.Gray Then
+            ' placeholder visible, ignore
+            Return
+        End If
+        If CheckBoxShow.Checked Then
+            TextBoxPassword.PasswordChar = ControlChars.NullChar
+            TextBoxConfirm.PasswordChar = ControlChars.NullChar
+        Else
+            TextBoxPassword.PasswordChar = "?"c
+            TextBoxConfirm.PasswordChar = "?"c
+        End If
+    End Sub
+
+    Private Sub TextBoxes_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxUsername.KeyDown, TextBoxPassword.KeyDown, TextBoxConfirm.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            ButtonRegister.PerformClick()
+        End If
+    End Sub
+
     Private Sub ButtonRegister_MouseEnter(sender As Object, e As EventArgs) Handles ButtonRegister.MouseEnter
-        ButtonRegister.BackColor = Color.FromArgb(5, 90, 180)
+        ButtonRegister.FlatAppearance.BorderColor = Color.White
+        ButtonRegister.BackColor = Color.White
+        ButtonRegister.ForeColor = Color.FromArgb(10, 20, 26)
     End Sub
 
     Private Sub ButtonRegister_MouseLeave(sender As Object, e As EventArgs) Handles ButtonRegister.MouseLeave
-        ButtonRegister.BackColor = Color.FromArgb(3, 58, 115)
+        ButtonRegister.FlatAppearance.BorderColor = Color.White
+        ButtonRegister.BackColor = Color.FromArgb(24, 30, 36)
+        ButtonRegister.ForeColor = Color.White
     End Sub
+
+    Private Sub ButtonBack_MouseEnter(sender As Object, e As EventArgs) Handles ButtonBack.MouseEnter
+        ButtonBack.FlatAppearance.BorderColor = Color.White
+        ButtonBack.BackColor = Color.White
+        ButtonBack.ForeColor = Color.FromArgb(10, 20, 26)
+    End Sub
+
+    Private Sub ButtonBack_MouseLeave(sender As Object, e As EventArgs) Handles ButtonBack.MouseLeave
+        ButtonBack.FlatAppearance.BorderColor = Color.White
+        ButtonBack.BackColor = Color.FromArgb(24, 30, 36)
+        ButtonBack.ForeColor = Color.White
+    End Sub
+
 End Class

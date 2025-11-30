@@ -22,6 +22,7 @@ Partial Class Login
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Login))
         PanelLeft = New Panel()
         PictureLogo = New PictureBox()
         PanelCard = New Panel()
@@ -52,7 +53,7 @@ Partial Class Login
         ' 
         ' PictureLogo
         ' 
-        PictureLogo.Image = My.Resources.Resources.thesisbuddy_logo
+        PictureLogo.Image = CType(resources.GetObject("PictureLogo.Image"), Image)
         PictureLogo.Location = New Point(-20, 23)
         PictureLogo.Name = "PictureLogo"
         PictureLogo.Size = New Size(405, 473)
@@ -81,18 +82,18 @@ Partial Class Login
         ' LabelTitle
         ' 
         LabelTitle.AutoSize = True
-        LabelTitle.Font = New Font("Segoe UI Semibold", 18.0F, FontStyle.Bold)
+        LabelTitle.Font = New Font("Segoe UI Semibold", 18F, FontStyle.Bold)
         LabelTitle.ForeColor = Color.FromArgb(CByte(72), CByte(233), CByte(223))
         LabelTitle.Location = New Point(36, 28)
         LabelTitle.Name = "LabelTitle"
-        LabelTitle.Size = New Size(286, 32)
+        LabelTitle.Size = New Size(293, 32)
         LabelTitle.TabIndex = 3
-        LabelTitle.Text = "Welcome to ThesisBuddy"
+        LabelTitle.Text = "Welcome to Thesis Buddy"
         ' 
         ' LabelSubtitle
         ' 
         LabelSubtitle.AutoSize = True
-        LabelSubtitle.Font = New Font("Segoe UI", 9.0F)
+        LabelSubtitle.Font = New Font("Segoe UI", 9F)
         LabelSubtitle.ForeColor = Color.LightGray
         LabelSubtitle.Location = New Point(36, 70)
         LabelSubtitle.Name = "LabelSubtitle"
@@ -103,7 +104,7 @@ Partial Class Login
         ' LabelUsername
         ' 
         LabelUsername.AutoSize = True
-        LabelUsername.Font = New Font("Segoe UI", 9.0F)
+        LabelUsername.Font = New Font("Segoe UI", 9F)
         LabelUsername.ForeColor = Color.LightGray
         LabelUsername.Location = New Point(36, 110)
         LabelUsername.Name = "LabelUsername"
@@ -115,7 +116,7 @@ Partial Class Login
         ' 
         TextBoxUsername.BackColor = Color.White
         TextBoxUsername.BorderStyle = BorderStyle.FixedSingle
-        TextBoxUsername.Font = New Font("Segoe UI", 10.0F)
+        TextBoxUsername.Font = New Font("Segoe UI", 10F)
         TextBoxUsername.ForeColor = Color.FromArgb(CByte(10), CByte(20), CByte(26))
         TextBoxUsername.Location = New Point(36, 135)
         TextBoxUsername.Name = "TextBoxUsername"
@@ -125,7 +126,7 @@ Partial Class Login
         ' LabelPassword
         ' 
         LabelPassword.AutoSize = True
-        LabelPassword.Font = New Font("Segoe UI", 9.0F)
+        LabelPassword.Font = New Font("Segoe UI", 9F)
         LabelPassword.ForeColor = Color.LightGray
         LabelPassword.Location = New Point(36, 180)
         LabelPassword.Name = "LabelPassword"
@@ -137,7 +138,7 @@ Partial Class Login
         ' 
         TextBoxPassword.BackColor = Color.White
         TextBoxPassword.BorderStyle = BorderStyle.FixedSingle
-        TextBoxPassword.Font = New Font("Segoe UI", 10.0F)
+        TextBoxPassword.Font = New Font("Segoe UI", 10F)
         TextBoxPassword.ForeColor = Color.FromArgb(CByte(10), CByte(20), CByte(26))
         TextBoxPassword.Location = New Point(36, 205)
         TextBoxPassword.Name = "TextBoxPassword"
@@ -170,10 +171,10 @@ Partial Class Login
         ' ButtonRegister
         ' 
         ButtonRegister.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonRegister.FlatStyle = FlatStyle.Flat
-        ButtonRegister.FlatAppearance.BorderSize = 2
         ButtonRegister.FlatAppearance.BorderColor = Color.White
-        ButtonRegister.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
+        ButtonRegister.FlatAppearance.BorderSize = 2
+        ButtonRegister.FlatStyle = FlatStyle.Flat
+        ButtonRegister.Font = New Font("Segoe UI Semibold", 9F, FontStyle.Bold)
         ButtonRegister.ForeColor = Color.White
         ButtonRegister.Location = New Point(36, 288)
         ButtonRegister.Name = "ButtonRegister"
@@ -185,10 +186,10 @@ Partial Class Login
         ' ButtonLogin
         ' 
         ButtonLogin.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonLogin.FlatStyle = FlatStyle.Flat
-        ButtonLogin.FlatAppearance.BorderSize = 2
         ButtonLogin.FlatAppearance.BorderColor = Color.White
-        ButtonLogin.Font = New Font("Segoe UI Semibold", 11.0F, FontStyle.Bold)
+        ButtonLogin.FlatAppearance.BorderSize = 2
+        ButtonLogin.FlatStyle = FlatStyle.Flat
+        ButtonLogin.Font = New Font("Segoe UI Semibold", 11F, FontStyle.Bold)
         ButtonLogin.ForeColor = Color.White
         ButtonLogin.Location = New Point(304, 288)
         ButtonLogin.Name = "ButtonLogin"
@@ -199,13 +200,13 @@ Partial Class Login
         ' 
         ' Login
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 17.0F)
+        AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(18), CByte(24), CByte(31))
         ClientSize = New Size(900, 520)
         Controls.Add(PanelCard)
         Controls.Add(PanelLeft)
-        Font = New Font("Segoe UI", 10.0F)
+        Font = New Font("Segoe UI", 10F)
         FormBorderStyle = FormBorderStyle.FixedSingle
         MaximizeBox = False
         Name = "Login"
