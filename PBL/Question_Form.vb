@@ -22,7 +22,7 @@ Public Class Question_Form
     Private subtitleLabel As Label
 
     Private Sub Question_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Position and rounded panel card
+
         Dim found = Me.Controls.Find("PanelCard", True)
         If found.Length > 0 Then
             Dim panelCard As Panel = DirectCast(found(0), Panel)
@@ -48,7 +48,7 @@ Public Class Question_Form
             End Try
         End If
 
-        ' Make logo smaller and position top-left
+
         Try
             If PictureLogo IsNot Nothing Then
                 PictureLogo.SizeMode = PictureBoxSizeMode.Zoom
@@ -60,7 +60,7 @@ Public Class Question_Form
         Catch
         End Try
 
-        ' Create title and subtitle centrally
+
         Try
             titleLabel = New Label()
             titleLabel.Text = "Sistem Pakar ThesisBuddy"
@@ -80,20 +80,38 @@ Public Class Question_Form
             subtitleLabel.TextAlign = ContentAlignment.MiddleCenter
             subtitleLabel.Dock = DockStyle.Top
 
-            Me.Controls.Add(subtitleLabel)
-            Me.Controls.Add(titleLabel)
-            titleLabel.BringToFront()
-            subtitleLabel.BringToFront()
 
-            If FlowLayoutPanelQuestions IsNot Nothing Then
-                FlowLayoutPanelQuestions.Padding = New Padding(12)
+            Dim cardFound = Me.Controls.Find("PanelCard", True)
+            If cardFound.Length > 0 Then
+                Dim panelCard As Panel = DirectCast(cardFound(0), Panel)
+
+                panelCard.Controls.Add(titleLabel)
+                panelCard.Controls.Add(subtitleLabel)
+                titleLabel.BringToFront()
+                subtitleLabel.BringToFront()
+
+
+                If FlowLayoutPanelQuestions IsNot Nothing Then
+                    Dim headerHeight As Integer = titleLabel.Height + subtitleLabel.Height + 16
+                    FlowLayoutPanelQuestions.Padding = New Padding(12, headerHeight, 12, 12)
+                    FlowLayoutPanelQuestions.Dock = DockStyle.Fill
+                End If
+            Else
+
+                Me.Controls.Add(titleLabel)
+                Me.Controls.Add(subtitleLabel)
+                titleLabel.BringToFront()
+                subtitleLabel.BringToFront()
+
+                If FlowLayoutPanelQuestions IsNot Nothing Then
+                    FlowLayoutPanelQuestions.Padding = New Padding(12)
+                End If
             End If
         Catch
         End Try
 
         FlowLayoutPanelQuestions.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Bottom
 
-        ' Hide designer cancel button if present to avoid duplicate
         Try
             Dim bc = Me.Controls.Find("ButtonCancel", True)
             If bc.Length > 0 Then
@@ -159,7 +177,7 @@ Public Class Question_Form
                                                   End Sub
 
                     Case "kvlist"
-                        ' create table layout with 3 columns
+
                         Dim cols As Integer = 3
                         Dim rows As Integer = CInt(Math.Ceiling(LANGUAGE_LIST.Length / CDbl(cols)))
                         Dim tlp As New TableLayoutPanel()
@@ -215,7 +233,7 @@ Public Class Question_Form
                             placeholder.AutoSize = True
                             placeholder.Controls.Add(itemPanel)
 
-                            ' ensure enough rows
+
                             While tlp.RowCount <= r
                                 tlp.RowCount += 1
                                 tlp.RowStyles.Add(New RowStyle(SizeType.AutoSize))
@@ -263,7 +281,7 @@ Public Class Question_Form
             Next
         End If
 
-        ' Navigation buttons
+
         If stepIndex > 1 Then
             Dim btnPrev As New Button()
             btnPrev.Text = "Previous"
@@ -273,6 +291,10 @@ Public Class Question_Form
                                           ShowQuestionsForStep(currentStep)
                                       End Sub
             btnPrev.Margin = New Padding(6)
+            btnPrev.FlatStyle = FlatStyle.Flat
+            btnPrev.ForeColor = Color.White
+            btnPrev.BackColor = Color.FromArgb(34, 40, 46)
+            btnPrev.FlatAppearance.BorderColor = Color.FromArgb(50, 50, 50)
             PanelNav.Controls.Add(btnPrev)
         End If
 
@@ -286,6 +308,10 @@ Public Class Question_Form
                                           ShowQuestionsForStep(currentStep)
                                       End Sub
             btnNext.Margin = New Padding(6)
+            btnNext.FlatStyle = FlatStyle.Flat
+            btnNext.ForeColor = Color.White
+            btnNext.BackColor = Color.FromArgb(34, 40, 46)
+            btnNext.FlatAppearance.BorderColor = Color.FromArgb(50, 50, 50)
             PanelNav.Controls.Add(btnNext)
         Else
             Dim btnSubmit As New Button()
@@ -307,9 +333,10 @@ Public Class Question_Form
         btnCancelNav.ForeColor = Color.White
         btnCancelNav.BackColor = Color.FromArgb(34, 40, 46)
         btnCancelNav.FlatStyle = FlatStyle.Flat
+        btnCancelNav.FlatAppearance.BorderColor = Color.FromArgb(50, 50, 50)
         PanelNav.Controls.Add(btnCancelNav)
 
-        ' right-align spacer
+
         Dim spacerLabel As New Label()
         spacerLabel.Width = Math.Max(0, PanelNav.Width - PanelNav.Controls.Cast(Of Control)().Sum(Function(c) c.Width + c.Margin.Horizontal))
         PanelNav.Controls.Add(spacerLabel)
@@ -319,11 +346,10 @@ Public Class Question_Form
         Dim nud = TryCast(sender, NumericUpDown)
         If nud Is Nothing Then Return
 
-        ' find parent TableLayoutPanel
+
         Dim tlp = FindParentOfType(nud, GetType(TableLayoutPanel))
         If tlp IsNot Nothing Then
-            ' attempt to find the qKey by searching nearby question label text - not ideal but qKey stored via tag not available here
-            ' Instead rebuild all kvlist answers across controls and merge into answers dictionary under both 'skills' and 'interests' where applicable
+
             UpdateAllKvlistAnswers()
         End If
     End Sub
@@ -365,19 +391,18 @@ Public Class Question_Form
     End Sub
 
     Private Sub UpdateAllKvlistAnswers()
-        ' Iterate FlowLayoutPanelQuestions controls and update any kvlist-style TableLayoutPanel found
         For Each c As Control In FlowLayoutPanelQuestions.Controls
             If TypeOf c Is TableLayoutPanel Then
-                ' find associated question key by checking previous label (assumes label added before)
+
                 Dim idx = FlowLayoutPanelQuestions.Controls.GetChildIndex(c)
                 If idx > 0 Then
                     Dim prev = FlowLayoutPanelQuestions.Controls(idx - 1)
                     Dim qKey As String = Nothing
                     If TypeOf prev Is Label Then
-                        ' might contain prompt, cannot reliably map to qKey; skip mapping here
+
                     End If
                 End If
-                ' attempt to update a generic key name 'skills' if exists
+
                 UpdateKvlistAnswers(DirectCast(c, TableLayoutPanel), "skills")
                 UpdateKvlistAnswers(DirectCast(c, TableLayoutPanel), "interests")
             End If

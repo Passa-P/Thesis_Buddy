@@ -147,23 +147,54 @@ Public Module DatabaseHelper
         Try
             Using conn As MySqlConnection = GetConnection()
                 conn.Open()
-                Dim sql As String = "SELECT id, qkey, prompt, qtype, options, qstep, active FROM questions WHERE qstep = @step AND active = 1 ORDER BY id"
-                Using cmd As New MySqlCommand(sql, conn)
-                    cmd.Parameters.AddWithValue("@step", stepIndex)
-                    Using rdr As MySqlDataReader = cmd.ExecuteReader()
-                        While rdr.Read()
-                            Dim m As New QuestionModel()
-                            m.Id = Convert.ToInt32(rdr("id"))
-                            m.QKey = Convert.ToString(rdr("qkey"))
-                            m.Prompt = Convert.ToString(rdr("prompt"))
-                            m.QType = Convert.ToString(rdr("qtype"))
-                            m.Options = Convert.ToString(rdr("options"))
-                            m.QStep = Convert.ToInt32(rdr("qstep"))
-                            m.Active = Convert.ToInt32(rdr("active")) = 1
-                            list.Add(m)
-                        End While
+                ' First try the newer schema (qstep)
+                Try
+                    Dim sql As String = "SELECT id, qkey, prompt, qtype, options, qstep, active FROM questions WHERE qstep = @step AND active = 1 ORDER BY id"
+                    Using cmd As New MySqlCommand(sql, conn)
+                        cmd.Parameters.AddWithValue("@step", stepIndex)
+                        Using rdr As MySqlDataReader = cmd.ExecuteReader()
+                            While rdr.Read()
+                                Dim m As New QuestionModel()
+                                m.Id = Convert.ToInt32(rdr("id"))
+                                m.QKey = Convert.ToString(rdr("qkey"))
+                                m.Prompt = Convert.ToString(rdr("prompt"))
+                                m.QType = Convert.ToString(rdr("qtype"))
+                                m.Options = Convert.ToString(rdr("options"))
+                                m.QStep = Convert.ToInt32(rdr("qstep"))
+                                m.Active = Convert.ToInt32(rdr("active")) = 1
+                                list.Add(m)
+                            End While
+                        End Using
                     End Using
-                End Using
+                Catch ex As MySqlException
+                    ' if qstep column doesn't exist, fall back to legacy 'step' column
+                End Try
+
+                ' If no rows found, try legacy schema (step)
+                If list.Count = 0 Then
+                    Try
+                        Dim sql2 As String = "SELECT id, qkey, prompt, qtype, options, step, active FROM questions WHERE step = @step AND active = 1 ORDER BY id"
+                        Using cmd2 As New MySqlCommand(sql2, conn)
+                            cmd2.Parameters.AddWithValue("@step", stepIndex)
+                            Using rdr2 As MySqlDataReader = cmd2.ExecuteReader()
+                                While rdr2.Read()
+                                    Dim m As New QuestionModel()
+                                    m.Id = Convert.ToInt32(rdr2("id"))
+                                    m.QKey = Convert.ToString(rdr2("qkey"))
+                                    m.Prompt = Convert.ToString(rdr2("prompt"))
+                                    m.QType = Convert.ToString(rdr2("qtype"))
+                                    m.Options = Convert.ToString(rdr2("options"))
+                                    ' map legacy step to QStep
+                                    m.QStep = Convert.ToInt32(rdr2("step"))
+                                    m.Active = Convert.ToInt32(rdr2("active")) = 1
+                                    list.Add(m)
+                                End While
+                            End Using
+                        End Using
+                    Catch ex2 As Exception
+                        ' ignore and return what we have
+                    End Try
+                End If
             End Using
         Catch ex As Exception
             ' ignore
