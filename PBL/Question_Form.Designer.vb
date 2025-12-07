@@ -28,7 +28,7 @@ Partial Class Question_Form
         LabelTitle = New Label()
         LabelSubtitle = New Label()
         FlowLayoutPanelQuestions = New FlowLayoutPanel()
-        PanelNav = New Panel()
+        PanelNav = New FlowLayoutPanel()
         ButtonSubmit = New Button()
         ButtonCancel = New Button()
         PanelLeft.SuspendLayout()
@@ -38,13 +38,13 @@ Partial Class Question_Form
         ' 
         ' PanelLeft
         ' 
-        PanelLeft.BackColor = Color.FromArgb(CByte(12), CByte(18), CByte(25))
+        PanelLeft.BackColor = Color.FromArgb(CByte(26), CByte(32), CByte(44))
         PanelLeft.Controls.Add(PictureLogo)
         PanelLeft.Dock = DockStyle.Left
         PanelLeft.Location = New Point(0, 0)
         PanelLeft.Name = "PanelLeft"
         PanelLeft.Padding = New Padding(20)
-        PanelLeft.Size = New Size(360, 520)
+        PanelLeft.Size = New Size(400, 700)
         PanelLeft.TabIndex = 0
         ' 
         ' PictureLogo
@@ -59,99 +59,106 @@ Partial Class Question_Form
         ' 
         ' PanelCard
         ' 
-        PanelCard.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
+        PanelCard.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(255))
         PanelCard.Controls.Add(LabelTitle)
         PanelCard.Controls.Add(LabelSubtitle)
         PanelCard.Controls.Add(FlowLayoutPanelQuestions)
         PanelCard.Controls.Add(PanelNav)
         PanelCard.Controls.Add(ButtonSubmit)
         PanelCard.Controls.Add(ButtonCancel)
-        PanelCard.Location = New Point(400, 40)
+        PanelCard.Location = New Point(450, 50)
         PanelCard.Name = "PanelCard"
-        PanelCard.Size = New Size(460, 440)
+        PanelCard.Size = New Size(550, 600)
         PanelCard.TabIndex = 2
         ' 
         ' LabelTitle
         ' 
         LabelTitle.AutoSize = True
-        LabelTitle.Font = New Font("Segoe UI Semibold", 18F, FontStyle.Bold)
-        LabelTitle.ForeColor = Color.White
-        LabelTitle.Location = New Point(36, 18)
+        LabelTitle.Font = New Font("Segoe UI", 22.0F, FontStyle.Bold)
+        LabelTitle.ForeColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        LabelTitle.Location = New Point(40, 25)
         LabelTitle.Name = "LabelTitle"
-        LabelTitle.Size = New Size(296, 32)
+        LabelTitle.Size = New Size(400, 41)
         LabelTitle.TabIndex = 3
-        LabelTitle.Text = "Sistem Pakar ThesisBuddy"
+        LabelTitle.Text = "Motivation Assessment"
         ' 
         ' LabelSubtitle
         ' 
         LabelSubtitle.AutoSize = True
-        LabelSubtitle.Font = New Font("Segoe UI", 10.0F)
-        LabelSubtitle.ForeColor = Color.DimGray
-        LabelSubtitle.Location = New Point(37, 58)
+        LabelSubtitle.Font = New Font("Segoe UI", 11.0F)
+        LabelSubtitle.ForeColor = Color.FromArgb(CByte(107), CByte(114), CByte(128))
+        LabelSubtitle.Location = New Point(40, 72)
         LabelSubtitle.Name = "LabelSubtitle"
-        LabelSubtitle.Size = New Size(125, 19)
+        LabelSubtitle.Size = New Size(350, 20)
         LabelSubtitle.TabIndex = 4
-        LabelSubtitle.Text = "Dapatkan jawaban:"
+        LabelSubtitle.Text = "Answer all questions to get your thesis recommendation"
         ' 
         ' FlowLayoutPanelQuestions
         ' 
         FlowLayoutPanelQuestions.AutoScroll = True
+        FlowLayoutPanelQuestions.BackColor = Color.FromArgb(CByte(248), CByte(250), CByte(252))
         FlowLayoutPanelQuestions.FlowDirection = FlowDirection.TopDown
-        FlowLayoutPanelQuestions.Location = New Point(36, 80)
+        FlowLayoutPanelQuestions.Location = New Point(40, 110)
         FlowLayoutPanelQuestions.Name = "FlowLayoutPanelQuestions"
-        FlowLayoutPanelQuestions.Padding = New Padding(8)
-        FlowLayoutPanelQuestions.Size = New Size(388, 320)
+        FlowLayoutPanelQuestions.Padding = New Padding(12)
+        FlowLayoutPanelQuestions.Size = New Size(470, 420)
         FlowLayoutPanelQuestions.TabIndex = 5
         FlowLayoutPanelQuestions.WrapContents = False
         ' 
         ' PanelNav
         ' 
-        PanelNav.Location = New Point(36, 392)
+        PanelNav.BackColor = Color.Transparent
+        PanelNav.FlowDirection = FlowDirection.LeftToRight
+        PanelNav.Location = New Point(40, 540)
+        PanelNav.Margin = New Padding(0)
         PanelNav.Name = "PanelNav"
-        PanelNav.Size = New Size(388, 40)
+        PanelNav.Padding = New Padding(0)
+        PanelNav.Size = New Size(470, 50)
         PanelNav.TabIndex = 7
+        PanelNav.WrapContents = False
         ' 
         ' ButtonSubmit
         ' 
-        ButtonSubmit.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonSubmit.FlatAppearance.BorderColor = Color.White
-        ButtonSubmit.FlatAppearance.BorderSize = 2
+        ButtonSubmit.BackColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        ButtonSubmit.FlatAppearance.BorderSize = 0
         ButtonSubmit.FlatStyle = FlatStyle.Flat
-        ButtonSubmit.Font = New Font("Segoe UI Semibold", 11F, FontStyle.Bold)
+        ButtonSubmit.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold)
         ButtonSubmit.ForeColor = Color.White
-        ButtonSubmit.Location = New Point(304, 392)
+        ButtonSubmit.Location = New Point(320, 540)
         ButtonSubmit.Name = "ButtonSubmit"
-        ButtonSubmit.Size = New Size(120, 40)
+        ButtonSubmit.Size = New Size(190, 50)
         ButtonSubmit.TabIndex = 6
-        ButtonSubmit.Text = "Submit"
+        ButtonSubmit.Text = "Submit Answers"
         ButtonSubmit.UseVisualStyleBackColor = False
         ButtonSubmit.Visible = False
+        ButtonSubmit.Cursor = Cursors.Hand
         ' 
         ' ButtonCancel
         ' 
-        ButtonCancel.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonCancel.FlatAppearance.BorderColor = Color.White
+        ButtonCancel.BackColor = Color.White
+        ButtonCancel.FlatAppearance.BorderColor = Color.FromArgb(CByte(239), CByte(68), CByte(68))
         ButtonCancel.FlatAppearance.BorderSize = 2
         ButtonCancel.FlatStyle = FlatStyle.Flat
-        ButtonCancel.Font = New Font("Segoe UI Semibold", 9F, FontStyle.Bold)
-        ButtonCancel.ForeColor = Color.White
-        ButtonCancel.Location = New Point(36, 392)
+        ButtonCancel.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold)
+        ButtonCancel.ForeColor = Color.FromArgb(CByte(239), CByte(68), CByte(68))
+        ButtonCancel.Location = New Point(40, 540)
         ButtonCancel.Name = "ButtonCancel"
-        ButtonCancel.Size = New Size(140, 40)
+        ButtonCancel.Size = New Size(190, 50)
         ButtonCancel.TabIndex = 7
         ButtonCancel.Text = "Cancel"
         ButtonCancel.UseVisualStyleBackColor = False
         ButtonCancel.Visible = False
+        ButtonCancel.Cursor = Cursors.Hand
         ' 
         ' Question_Form
         ' 
-        AutoScaleDimensions = New SizeF(7F, 17F)
+        AutoScaleDimensions = New SizeF(7.0F, 17.0F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = Color.FromArgb(CByte(18), CByte(24), CByte(31))
-        ClientSize = New Size(900, 520)
+        BackColor = Color.FromArgb(CByte(243), CByte(244), CByte(246))
+        ClientSize = New Size(1050, 700)
         Controls.Add(PanelCard)
         Controls.Add(PanelLeft)
-        Font = New Font("Segoe UI", 10F)
+        Font = New Font("Segoe UI", 10.0F)
         FormBorderStyle = FormBorderStyle.FixedSingle
         MaximizeBox = False
         Name = "Question_Form"
@@ -171,7 +178,7 @@ Partial Class Question_Form
     Friend WithEvents LabelTitle As Label
     Friend WithEvents LabelSubtitle As Label
     Friend WithEvents FlowLayoutPanelQuestions As FlowLayoutPanel
-    Friend WithEvents PanelNav As Panel
+    Friend WithEvents PanelNav As FlowLayoutPanel
     Friend WithEvents ButtonSubmit As Button
     Friend WithEvents ButtonCancel As Button
 

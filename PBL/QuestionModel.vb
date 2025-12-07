@@ -6,4 +6,7 @@ Public Class QuestionModel
     Public Property Options As String
     Public Property QStep As Integer
     Public Property Active As Boolean
+    Public Property Category As String
+    Public Property RuleCode As String
+    Public Property CertaintyFactor As Double
 End Class

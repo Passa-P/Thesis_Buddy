@@ -203,4 +203,7 @@ Public Class Register
         ButtonBack.ForeColor = Color.White
     End Sub
 
+    Private Sub LabelUsername_Click(sender As Object, e As EventArgs) Handles LabelUsername.Click
+
+    End Sub
 End Class

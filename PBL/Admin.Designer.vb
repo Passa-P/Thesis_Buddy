@@ -28,10 +28,12 @@ Partial Class Admin
         ' 
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = Color.Cornsilk
+        BackColor = Color.FromArgb(CByte(243), CByte(244), CByte(246))
         ClientSize = New Size(800, 450)
+        Font = New Font("Segoe UI", 10.0F)
         Name = "Admin"
-        Text = "Admin"
+        StartPosition = FormStartPosition.CenterScreen
+        Text = "Admin - ThesisBuddy"
         ResumeLayout(False)
     End Sub
 End Class

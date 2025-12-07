@@ -36,12 +36,12 @@ Partial Class Main_Menu
         ' 
         ' PanelLeft
         ' 
-        PanelLeft.BackColor = Color.FromArgb(CByte(12), CByte(18), CByte(25))
+        PanelLeft.BackColor = Color.FromArgb(CByte(26), CByte(32), CByte(44))
         PanelLeft.Controls.Add(PictureLogo)
         PanelLeft.Dock = DockStyle.Left
         PanelLeft.Location = New Point(0, 0)
         PanelLeft.Name = "PanelLeft"
-        PanelLeft.Size = New Size(360, 520)
+        PanelLeft.Size = New Size(380, 600)
         PanelLeft.TabIndex = 0
         ' 
         ' PictureLogo
@@ -56,78 +56,80 @@ Partial Class Main_Menu
         ' 
         ' PanelCard
         ' 
-        PanelCard.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
+        PanelCard.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(255))
         PanelCard.Controls.Add(LabelTitle)
         PanelCard.Controls.Add(ButtonStart)
         PanelCard.Controls.Add(ButtonAbout)
         PanelCard.Controls.Add(ButtonExit)
-        PanelCard.Location = New Point(400, 80)
+        PanelCard.Location = New Point(440, 100)
         PanelCard.Name = "PanelCard"
-        PanelCard.Size = New Size(460, 360)
+        PanelCard.Size = New Size(480, 400)
         PanelCard.TabIndex = 2
         ' 
         ' LabelTitle
         ' 
         LabelTitle.AutoSize = True
-        LabelTitle.Font = New Font("Segoe UI Semibold", 18F, FontStyle.Bold)
-        LabelTitle.ForeColor = Color.White
-        LabelTitle.Location = New Point(17, 11)
+        LabelTitle.Font = New Font("Segoe UI", 26F, FontStyle.Bold)
+        LabelTitle.ForeColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        LabelTitle.Location = New Point(95, 40)
         LabelTitle.Name = "LabelTitle"
-        LabelTitle.Size = New Size(149, 32)
+        LabelTitle.Size = New Size(290, 47)
         LabelTitle.TabIndex = 3
         LabelTitle.Text = "ThesisBuddy"
         ' 
         ' ButtonStart
         ' 
-        ButtonStart.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonStart.FlatAppearance.BorderColor = Color.White
-        ButtonStart.FlatAppearance.BorderSize = 2
+        ButtonStart.BackColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        ButtonStart.FlatAppearance.BorderSize = 0
         ButtonStart.FlatStyle = FlatStyle.Flat
-        ButtonStart.Font = New Font("Segoe UI Semibold", 11F, FontStyle.Bold)
+        ButtonStart.Font = New Font("Segoe UI", 16F, FontStyle.Bold)
         ButtonStart.ForeColor = Color.White
-        ButtonStart.Location = New Point(17, 286)
+        ButtonStart.Location = New Point(90, 150)
         ButtonStart.Name = "ButtonStart"
-        ButtonStart.Size = New Size(153, 57)
+        ButtonStart.Size = New Size(300, 70)
         ButtonStart.TabIndex = 4
-        ButtonStart.Text = "Start"
+        ButtonStart.Text = "▶ Start Consultation"
         ButtonStart.UseVisualStyleBackColor = False
+        ButtonStart.Cursor = Cursors.Hand
         ' 
         ' ButtonAbout
         ' 
-        ButtonAbout.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonAbout.FlatAppearance.BorderColor = Color.White
+        ButtonAbout.BackColor = Color.White
+        ButtonAbout.FlatAppearance.BorderColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
         ButtonAbout.FlatAppearance.BorderSize = 2
         ButtonAbout.FlatStyle = FlatStyle.Flat
-        ButtonAbout.Font = New Font("Segoe UI Semibold", 9F, FontStyle.Bold)
-        ButtonAbout.ForeColor = Color.White
-        ButtonAbout.Location = New Point(307, 304)
+        ButtonAbout.Font = New Font("Segoe UI", 12F, FontStyle.Bold)
+        ButtonAbout.ForeColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        ButtonAbout.Location = New Point(90, 245)
         ButtonAbout.Name = "ButtonAbout"
-        ButtonAbout.Size = New Size(61, 39)
+        ButtonAbout.Size = New Size(300, 50)
         ButtonAbout.TabIndex = 5
-        ButtonAbout.Text = "About"
+        ButtonAbout.Text = "ℹ About"
         ButtonAbout.UseVisualStyleBackColor = False
+        ButtonAbout.Cursor = Cursors.Hand
         ' 
         ' ButtonExit
         ' 
-        ButtonExit.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonExit.FlatAppearance.BorderColor = Color.White
+        ButtonExit.BackColor = Color.White
+        ButtonExit.FlatAppearance.BorderColor = Color.FromArgb(CByte(239), CByte(68), CByte(68))
         ButtonExit.FlatAppearance.BorderSize = 2
         ButtonExit.FlatStyle = FlatStyle.Flat
-        ButtonExit.Font = New Font("Segoe UI Semibold", 9F, FontStyle.Bold)
-        ButtonExit.ForeColor = Color.White
-        ButtonExit.Location = New Point(383, 304)
+        ButtonExit.Font = New Font("Segoe UI", 12F, FontStyle.Bold)
+        ButtonExit.ForeColor = Color.FromArgb(CByte(239), CByte(68), CByte(68))
+        ButtonExit.Location = New Point(90, 315)
         ButtonExit.Name = "ButtonExit"
-        ButtonExit.Size = New Size(61, 39)
+        ButtonExit.Size = New Size(300, 50)
         ButtonExit.TabIndex = 6
-        ButtonExit.Text = "Exit"
+        ButtonExit.Text = "✖ Exit"
         ButtonExit.UseVisualStyleBackColor = False
+        ButtonExit.Cursor = Cursors.Hand
         ' 
         ' Main_Menu
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = Color.FromArgb(CByte(18), CByte(24), CByte(31))
-        ClientSize = New Size(900, 520)
+        BackColor = Color.FromArgb(CByte(243), CByte(244), CByte(246))
+        ClientSize = New Size(1000, 600)
         Controls.Add(PanelCard)
         Controls.Add(PanelLeft)
         Font = New Font("Segoe UI", 10F)

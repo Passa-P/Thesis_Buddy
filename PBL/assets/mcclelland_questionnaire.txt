@@ -1,0 +1,156 @@
+# qkey|rule|cf|question
+# Need for Achievement (nAch)
+F_A1|R1|0.85|Apakah Anda sering menjadi debugger utama dalam tim proyek?
+F_A2|R2|0.82|Apakah Anda pernah mengikuti seminar atau pelatihan tentang Machine Learning atau Deep Learning?
+F_A3|R3|0.75|Apakah Anda merasa lebih nyaman bekerja dengan sistem operasi berbasis command line seperti Linux?
+F_A4|R4|0.80|Apakah Anda pernah menghabiskan lebih dari 4 jam mencari satu solusi teknis di Stack Overflow atau dokumentasi?
+F_A5|R5|0.88|Apakah Anda lebih tertarik pada mata kuliah yang menuntut pembuktian matematis atau algoritma yang ketat?
+F_A6|R6|0.79|Apakah Anda memiliki pengalaman dalam optimasi kinerja kode seperti mengurangi waktu eksekusi?
+F_A7|R7|0.70|Apakah Anda pernah membuat script automation untuk pekerjaan pribadi?
+F_A8|R8|0.72|Dalam proyek, apakah Anda lebih suka menerima feedback tentang kelemahan kode Anda?
+F_A9|R9|0.86|Jika deadline mepet, apakah Anda akan mengorbankan kecepatan demi kualitas arsitektur kode?
+F_A10|R10|0.83|Apakah Anda merasa coding adalah bagian paling menyenangkan dari seluruh siklus pengembangan software?
+F_A11|R11|0.77|Apakah Anda sering membandingkan kinerja Anda dengan standar industri atau benchmark?
+F_A12|R12|0.74|Apakah Anda memiliki portofolio proyek teknis yang dikerjakan sepenuhnya secara mandiri?
+F_A13|R13|0.78|Apakah Anda suka menetapkan tujuan pribadi yang lebih tinggi dari yang diminta oleh dosen?
+F_A14|R14|0.70|Apakah Anda lebih tertarik pada backend dan database daripada frontend dan user interface?
+F_A15|R15|0.65|Apakah Anda secara teratur membaca jurnal atau publikasi ilmiah terkait IT?
+F_A16|R16|0.60|Apakah Anda menggunakan Version Control seperti Git secara teratur?
+F_A17|R17|0.73|Apakah Anda lebih suka bekerja sendiri untuk memastikan detail teknis terjamin?
+F_A18|R18|0.81|Apakah Anda tertarik meneliti topik yang membutuhkan proof of concept matematis?
+F_A19|R19|0.68|Apakah Anda pernah mengembangkan aplikasi yang sepenuhnya berjalan di server tanpa antarmuka visual?
+F_A20|R20|0.76|Apakah Anda pernah mengikuti atau berniat mengikuti kompetisi coding atau hackathon?
+F_A21|R21|0.75|Apakah Anda pernah mengimplementasikan Design Patterns seperti MVC atau MVVM dalam proyek pribadi?
+F_A22|R22|0.69|Apakah Anda pernah mencoba self-hosting server seperti website atau game server?
+F_A23|R23|0.84|Apakah Anda pernah berkontribusi kode ke proyek Open Source?
+F_A24|R24|0.71|Apakah Anda menganggap clean code lebih penting daripada kode yang cepat selesai?
+F_A25|R25|0.73|Apakah Anda pernah melakukan code review untuk rekan tim secara inisiatif?
+F_A26|R26|0.88|Apakah Anda merasa termotivasi oleh tantangan latency dan scalability?
+F_A27|R27|0.78|Apakah Anda senang mempelajari bahasa pemrograman niche yang sulit?
+F_A28|R28|0.76|Apakah Anda sering mencari tahu best practices terbaru dalam arsitektur software?
+F_A29|R29|0.87|Apakah Anda lebih tertarik pada Operating System atau Compiler daripada Web Development?
+F_A30|R30|0.72|Apakah Anda pernah menggunakan unit testing atau integration testing dalam proyek?
+F_A31|R31|0.74|Apakah Anda merasa bertanggung jawab penuh jika terjadi bug kritis pada kode yang Anda tulis?
+F_A32|R32|0.81|Apakah Anda pernah membuat custom library atau framework sendiri?
+F_A33|R33|0.79|Apakah Anda akan menolak deadline jika yakin kualitas teknis akan terkompromi?
+F_A34|R34|0.70|Apakah Anda menganggap refactoring kode lama sebagai pekerjaan yang menyenangkan?
+F_A35|R35|0.83|Apakah Anda memiliki minat kuat pada Cyber Security yang memerlukan pemecahan masalah mendalam?
+F_A36|R36|0.75|Apakah Anda lebih suka memecahkan masalah dengan logika dan rumus daripada trial and error?
+F_A37|R37|0.86|Apakah Anda pernah menulis kode dengan kompleksitas waktu O(N log N) atau lebih baik?
+F_A38|R38|0.77|Apakah Anda pernah melakukan migrasi database atau upgrade sistem yang berisiko?
+F_A39|R39|0.78|Apakah Anda pernah menggunakan debugging tools tingkat lanjut selain print?
+F_A40|R40|0.85|Apakah Anda merasa perlu memahami cara kerja setiap tool atau library hingga ke level terendah?
+F_A41|R41|0.84|Apakah Anda ingin skripsi Anda diakui karena keunikan implementasi teknisnya?
+F_A42|R42|0.78|Apakah Anda pernah mendapatkan sertifikasi teknis di bidang Cloud, Jaringan, atau Coding?
+F_A43|R43|0.73|Apakah Anda sering mencari kritik teknis dari orang yang lebih ahli?
+F_A44|R44|0.87|Apakah Anda tertarik pada topik Reverse Engineering atau Exploit Development?
+F_A45|R45|0.89|Apakah Anda pernah membuat model Machine Learning tanpa library high-level seperti scikit-learn?
+F_A46|R46|0.90|Apakah Anda memandang kesulitan teknis sebagai tantangan pribadi untuk diatasi?
+F_A47|R47|0.76|Apakah Anda memiliki side project untuk menguji batas kemampuan teknologi?
+F_A48|R48|0.82|Apakah Anda lebih suka mendalami satu teknologi daripada tahu banyak secara dangkal?
+F_A49|R49|0.79|Apakah Anda memiliki spesialisasi teknis yang jelas seperti DevOps atau Data Engineer?
+F_A50|R50|0.65|Apakah IPK Anda mencerminkan standar akademik teknis yang Anda harapkan?
+
+# Need for Affiliation (nAff)
+F_B1|R51|0.80|Apakah Anda pernah menjadi mediator saat terjadi konflik dalam tim?
+F_B2|R52|0.75|Apakah Anda sering terlibat aktif dalam brainstorming atau diskusi kelompok?
+F_B3|R53|0.83|Apakah Anda lebih tertarik pada desain User Interface daripada coding algoritma?
+F_B4|R54|0.85|Apakah Anda memiliki pengalaman melakukan wawancara atau user research dengan pengguna akhir?
+F_B5|R55|0.78|Apakah Anda lebih memilih tugas yang melibatkan banyak interaksi dengan orang lain?
+F_B6|R56|0.70|Apakah Anda merasa tidak nyaman dalam lingkungan kerja yang sangat kompetitif?
+F_B7|R57|0.77|Apakah Anda sering menjelaskan konsep teknis kepada anggota tim non-teknis?
+F_B8|R58|0.86|Apakah Anda menganggap kepuasan pengguna lebih penting daripada kinerja teknis sistem?
+F_B9|R59|0.65|Apakah Anda pernah mengambil mata kuliah terkait desain, psikologi, atau komunikasi?
+F_B10|R60|0.72|Apakah Anda lebih suka bekerja dalam tim yang anggotanya sudah akrab dengan Anda?
+F_B11|R61|0.68|Apakah Anda akan menunda pekerjaan teknis untuk membantu rekan yang kesulitan?
+F_B12|R62|0.84|Apakah Anda ingin hasil skripsi langsung bermanfaat bagi masyarakat atau komunitas?
+F_B13|R63|0.74|Apakah Anda memiliki pengalaman menjadi mentor atau tutor IT?
+F_B14|R64|0.79|Apakah Anda lebih memilih peran Scrum Master daripada Lead Developer?
+F_B15|R65|0.81|Apakah Anda senang melakukan presentasi di depan kelas atau forum besar?
+F_B16|R66|0.71|Apakah Anda lebih suka menulis user manual daripada technical documentation?
+F_B17|R67|0.69|Apakah Anda cepat beradaptasi dan membangun hubungan dengan orang baru?
+F_B18|R68|0.73|Apakah Anda menghindari kritik terbuka yang dapat melukai perasaan orang lain?
+F_B19|R69|0.82|Apakah Anda merasa puas ketika berhasil membuat aplikasi yang intuitif dan mudah digunakan?
+F_B20|R70|0.63|Apakah Anda memiliki pengalaman aktif dalam kepanitiaan atau organisasi kampus?
+F_B21|R71|0.77|Apakah Anda setuju bahwa design thinking lebih penting daripada coding?
+F_B22|R72|0.80|Apakah Anda sering mencari tahu pain points dan keluhan pengguna?
+F_B23|R73|0.65|Apakah Anda pernah merelakan ide teknis demi ide yang lebih diterima tim?
+F_B24|R74|0.76|Apakah Anda lebih suka topik skripsi yang melibatkan A/B testing dengan pengguna?
+F_B25|R75|0.74|Apakah Anda pernah mengorganisir workshop atau pelatihan teknis untuk orang lain?
+F_B26|R76|0.68|Apakah Anda khawatir tentang dampak sosial negatif dari teknologi yang Anda buat?
+F_B27|R77|0.75|Apakah Anda lebih tertarik pada frontend framework seperti React atau Vue daripada bahasa backend seperti Go?
+F_B28|R78|0.60|Apakah Anda sering menjadi orang pertama yang menyambut anggota baru dalam tim?
+F_B29|R79|0.79|Apakah Anda lebih suka skripsi yang berfokus pada accessibility sistem?
+F_B30|R80|0.62|Apakah Anda memiliki akun media sosial aktif untuk interaksi profesional?
+F_B31|R81|0.78|Apakah Anda tertarik pada topik IT Consultant atau Technical Sales?
+F_B32|R82|0.67|Apakah Anda lebih suka membantu orang lain dengan masalah komputer mereka daripada mengerjakan tugas Anda?
+F_B33|R83|0.64|Apakah Anda sering menerima panggilan atau pesan untuk bantuan teknis?
+F_B34|R84|0.76|Apakah Anda pernah bekerja di posisi Customer Service atau Technical Support?
+F_B35|R85|0.71|Apakah Anda lebih suka bekerja dalam tim lintas fungsi?
+F_B36|R86|0.73|Apakah Anda memiliki minat kuat pada gamification yang melibatkan interaksi pengguna?
+F_B37|R87|0.69|Apakah Anda menganggap technical writing dan dokumentasi sama pentingnya dengan coding?
+F_B38|R88|0.75|Apakah Anda pernah mengadakan sesi knowledge sharing untuk rekan?
+F_B39|R89|0.70|Apakah Anda lebih memilih tools kolaborasi seperti Slack atau Jira daripada IDE atau terminal?
+F_B40|R90|0.81|Apakah Anda merasa bangga ketika user memuji desain interface yang Anda buat?
+F_B41|R91|0.82|Apakah Anda merasa bertanggung jawab atas morale dan kebahagiaan anggota tim?
+F_B42|R92|0.70|Apakah Anda menganggap persahabatan di kantor sama pentingnya dengan gaji?
+F_B43|R93|0.67|Apakah Anda menghindari code review yang terlalu kritis demi menjaga perasaan penulis kode?
+F_B44|R94|0.75|Apakah Anda setuju bahwa komunikasi adalah masalah terbesar dalam proyek software?
+F_B45|R95|0.69|Apakah Anda sering menjadi pencatat notulensi atau pengorganisir meeting?
+F_B46|R96|0.73|Apakah Anda lebih suka bekerja di kantor (on-site) daripada remote?
+F_B47|R97|0.68|Apakah Anda pernah terlibat dalam proyek crowdsourcing atau komunitas online besar?
+F_B48|R98|0.80|Apakah Anda tertarik meneliti topik Human-Computer Interaction?
+F_B49|R99|0.81|Apakah Anda senang ketika berhasil menyelesaikan masalah pengguna non-teknis?
+F_B50|R100|0.74|Apakah Anda lebih suka menyelesaikan masalah melalui diskusi kelompok daripada berpikir individu?
+
+# Need for Power (nPow)
+F_C1|R101|0.88|Apakah Anda pernah menjadi ketua atau pemimpin proyek IT yang formal?
+F_C2|R102|0.85|Apakah Anda tertarik pada topik skripsi yang fokus pada IT Governance seperti COBIT?
+F_C3|R103|0.84|Apakah Anda sering menjadi orang yang membuat keputusan akhir terkait arah proyek?
+F_C4|R104|0.80|Apakah Anda lebih tertarik pada master plan atau roadmap TI daripada implementasi kode?
+F_C5|R105|0.75|Apakah Anda memiliki minat kuat pada bidang manajemen, bisnis, atau keuangan?
+F_C6|R106|0.70|Apakah Anda merasa mampu memimpin tim meskipun bukan yang terbaik secara teknis?
+F_C7|R107|0.89|Apakah Anda ingin hasil skripsi menjadi standar atau kebijakan yang wajib diikuti organisasi?
+F_C8|R108|0.72|Apakah Anda merasa nyaman bernegosiasi atau berargumentasi untuk memenangkan ide Anda?
+F_C9|R109|0.78|Apakah Anda lebih suka mendelegasikan tugas daripada mengerjakannya sendiri?
+F_C10|R110|0.81|Apakah Anda menikmati proses evaluasi risiko dan perencanaan strategis?
+F_C11|R111|0.83|Apakah Anda akan memilih topik skripsi yang membuat Anda berhubungan dengan top management?
+F_C12|R112|0.76|Apakah Anda bersedia mengambil risiko tinggi jika impact yang dihasilkan sangat besar?
+F_C13|R113|0.77|Apakah Anda pernah membuat proposal bisnis atau rencana pemasaran untuk sebuah produk?
+F_C14|R114|0.82|Apakah Anda merasa puas ketika berhasil meyakinkan orang lain tentang pandangan Anda?
+F_C15|R115|0.79|Apakah Anda tertarik meneliti topik IT Audit atau Compliance?
+F_C16|R116|0.81|Apakah Anda ingin skripsi Anda menjadi dasar pembentukan divisi atau tim baru?
+F_C17|R117|0.65|Apakah Anda sering mencari tahu posisi jabatan dan jenjang karier manajerial di perusahaan IT?
+F_C18|R118|0.73|Apakah Anda sangat termotivasi oleh pengakuan dan status jabatan?
+F_C19|R119|0.70|Apakah Anda lebih tertarik pada Enterprise Architecture daripada Software Development?
+F_C20|R120|0.86|Apakah Anda menikmati peran yang mengendalikan budget atau sumber daya?
+F_C21|R121|0.75|Apakah Anda sering menganalisis kompetitor dan tren pasar IT?
+F_C22|R122|0.78|Apakah Anda pernah mewakili tim dalam meeting dengan stakeholder eksternal?
+F_C23|R123|0.80|Apakah Anda memiliki pengalaman menentukan KPI atau metrik proyek?
+F_C24|R124|0.74|Apakah Anda merasa nyaman mengawasi dan memberi arahan kerja kepada beberapa orang sekaligus?
+F_C25|R125|0.87|Apakah Anda lebih tertarik pada Business Process Re-engineering daripada coding?
+F_C26|R126|0.68|Apakah Anda cenderung membuat to-do list untuk orang lain daripada diri sendiri?
+F_C27|R127|0.73|Apakah Anda menganggap vendor management sebagai peran IT yang menarik?
+F_C28|R128|0.84|Apakah Anda lebih tertarik pada sertifikasi PMP atau ITIL daripada CCNA atau AWS Developer?
+F_C29|R129|0.89|Apakah Anda sering mencari solusi dengan impact terbesar bagi organisasi?
+F_C30|R130|0.86|Apakah Anda pernah membuat decision paper atau rekomendasi formal untuk manajemen?
+F_C31|R131|0.79|Apakah Anda tertarik meneliti kebijakan keamanan data seperti GDPR atau UU ITE?
+F_C32|R132|0.76|Apakah Anda menikmati proses due diligence atau audit sistem yang detail?
+F_C33|R133|0.70|Apakah Anda cenderung menerapkan proses kerja yang sangat terstruktur dan ketat dalam tim?
+F_C34|R134|0.81|Apakah Anda akan memilih topik skripsi yang hasilnya berupa framework atau model baru?
+F_C35|R135|0.72|Apakah Anda percaya kontrol proses lebih penting daripada fleksibilitas?
+F_C36|R136|0.77|Apakah Anda merasa nyaman memberi feedback berbentuk instruksi atau perintah?
+F_C37|R137|0.84|Apakah Anda pernah mengelola resource seperti dana atau tim yang bukan milik Anda sendiri?
+F_C38|R138|0.80|Apakah Anda akan memilih topik skripsi dengan sponsor atau klien dari manajemen tinggi?
+F_C39|R139|0.75|Apakah Anda sering menginisiasi meeting untuk menyelaraskan tujuan dan strategi?
+F_C40|R140|0.71|Apakah Anda melihat timeline proyek sebagai sesuatu yang harus dijaga sesuai rencana awal?
+F_C41|R141|0.88|Apakah Anda melihat diri sebagai CTO atau CIO dalam 10 tahun ke depan?
+F_C42|R142|0.83|Apakah Anda lebih suka membuat forecast dan proyeksi jangka panjang daripada coding harian?
+F_C43|R143|0.85|Apakah Anda pernah memimpin tim untuk mengatasi krisis atau masalah besar?
+F_C44|R144|0.70|Apakah Anda tertarik pada bidang Management Information Systems?
+F_C45|R145|0.74|Apakah Anda merasa puas saat dapat mendelegasikan tugas yang rumit?
+F_C46|R146|0.81|Apakah Anda percaya kepemimpinan kuat adalah kunci keberhasilan IT?
+F_C47|R147|0.79|Apakah Anda tertarik pada merger dan acquisition dari sudut pandang IT?
+F_C48|R148|0.76|Apakah Anda pernah membuat Business Model Canvas atau Lean Canvas?
+F_C49|R149|0.82|Apakah Anda melihat risk management sebagai peluang untuk kontrol lebih besar?
+F_C50|R150|0.90|Apakah Anda ingin skripsi Anda menjadi referensi untuk seluruh industri atau sektor?

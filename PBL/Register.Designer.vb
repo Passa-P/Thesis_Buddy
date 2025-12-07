@@ -34,8 +34,8 @@ Partial Class Register
         LabelConfirm = New Label()
         TextBoxConfirm = New TextBox()
         CheckBoxShow = New CheckBox()
-        ButtonBack = New Button()
         ButtonRegister = New Button()
+        ButtonBack = New Button()
         PanelLeft.SuspendLayout()
         CType(PictureLogo, ComponentModel.ISupportInitialize).BeginInit()
         PanelCard.SuspendLayout()
@@ -43,12 +43,12 @@ Partial Class Register
         ' 
         ' PanelLeft
         ' 
-        PanelLeft.BackColor = Color.FromArgb(CByte(12), CByte(18), CByte(25))
+        PanelLeft.BackColor = Color.FromArgb(CByte(26), CByte(32), CByte(44))
         PanelLeft.Controls.Add(PictureLogo)
         PanelLeft.Dock = DockStyle.Left
         PanelLeft.Location = New Point(0, 0)
         PanelLeft.Name = "PanelLeft"
-        PanelLeft.Size = New Size(360, 520)
+        PanelLeft.Size = New Size(380, 600)
         PanelLeft.TabIndex = 0
         ' 
         ' PictureLogo
@@ -63,7 +63,7 @@ Partial Class Register
         ' 
         ' PanelCard
         ' 
-        PanelCard.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
+        PanelCard.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(255))
         PanelCard.Controls.Add(LabelTitle)
         PanelCard.Controls.Add(LabelSubtitle)
         PanelCard.Controls.Add(LabelUsername)
@@ -73,41 +73,41 @@ Partial Class Register
         PanelCard.Controls.Add(LabelConfirm)
         PanelCard.Controls.Add(TextBoxConfirm)
         PanelCard.Controls.Add(CheckBoxShow)
-        PanelCard.Controls.Add(ButtonBack)
         PanelCard.Controls.Add(ButtonRegister)
-        PanelCard.Location = New Point(400, 80)
+        PanelCard.Controls.Add(ButtonBack)
+        PanelCard.Location = New Point(440, 80)
         PanelCard.Name = "PanelCard"
-        PanelCard.Size = New Size(460, 360)
+        PanelCard.Size = New Size(480, 450)
         PanelCard.TabIndex = 2
         ' 
         ' LabelTitle
         ' 
         LabelTitle.AutoSize = True
-        LabelTitle.Font = New Font("Segoe UI Semibold", 18F, FontStyle.Bold)
-        LabelTitle.ForeColor = Color.White
-        LabelTitle.Location = New Point(36, 28)
+        LabelTitle.Font = New Font("Segoe UI", 24.0F, FontStyle.Bold)
+        LabelTitle.ForeColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        LabelTitle.Location = New Point(40, 30)
         LabelTitle.Name = "LabelTitle"
-        LabelTitle.Size = New Size(213, 32)
+        LabelTitle.Size = New Size(190, 45)
         LabelTitle.TabIndex = 3
-        LabelTitle.Text = "Create an account"
+        LabelTitle.Text = "Get Started"
         ' 
         ' LabelSubtitle
         ' 
         LabelSubtitle.AutoSize = True
-        LabelSubtitle.Font = New Font("Segoe UI", 9F)
-        LabelSubtitle.ForeColor = Color.DimGray
-        LabelSubtitle.Location = New Point(36, 70)
+        LabelSubtitle.Font = New Font("Segoe UI", 11.0F)
+        LabelSubtitle.ForeColor = Color.FromArgb(CByte(107), CByte(114), CByte(128))
+        LabelSubtitle.Location = New Point(40, 80)
         LabelSubtitle.Name = "LabelSubtitle"
-        LabelSubtitle.Size = New Size(135, 15)
+        LabelSubtitle.Size = New Size(317, 20)
         LabelSubtitle.TabIndex = 4
-        LabelSubtitle.Text = "Register to Thesis Buddy"
+        LabelSubtitle.Text = "Create your account to start using ThesisBuddy"
         ' 
         ' LabelUsername
         ' 
         LabelUsername.AutoSize = True
-        LabelUsername.Font = New Font("Segoe UI", 9F)
+        LabelUsername.Font = New Font("Segoe UI", 9.0F)
         LabelUsername.ForeColor = Color.LightGray
-        LabelUsername.Location = New Point(36, 110)
+        LabelUsername.Location = New Point(40, 143)
         LabelUsername.Name = "LabelUsername"
         LabelUsername.Size = New Size(60, 15)
         LabelUsername.TabIndex = 5
@@ -115,21 +115,21 @@ Partial Class Register
         ' 
         ' TextBoxUsername
         ' 
-        TextBoxUsername.BackColor = Color.White
+        TextBoxUsername.BackColor = Color.FromArgb(CByte(248), CByte(250), CByte(252))
         TextBoxUsername.BorderStyle = BorderStyle.FixedSingle
-        TextBoxUsername.Font = New Font("Segoe UI", 10F)
-        TextBoxUsername.ForeColor = Color.FromArgb(CByte(10), CByte(20), CByte(26))
-        TextBoxUsername.Location = New Point(36, 135)
+        TextBoxUsername.Font = New Font("Segoe UI", 11.0F)
+        TextBoxUsername.ForeColor = Color.FromArgb(CByte(31), CByte(41), CByte(55))
+        TextBoxUsername.Location = New Point(40, 171)
         TextBoxUsername.Name = "TextBoxUsername"
-        TextBoxUsername.Size = New Size(388, 25)
+        TextBoxUsername.Size = New Size(400, 27)
         TextBoxUsername.TabIndex = 6
         ' 
         ' LabelPassword
         ' 
         LabelPassword.AutoSize = True
-        LabelPassword.Font = New Font("Segoe UI", 9F)
+        LabelPassword.Font = New Font("Segoe UI", 9.0F)
         LabelPassword.ForeColor = Color.LightGray
-        LabelPassword.Location = New Point(36, 170)
+        LabelPassword.Location = New Point(40, 214)
         LabelPassword.Name = "LabelPassword"
         LabelPassword.Size = New Size(57, 15)
         LabelPassword.TabIndex = 7
@@ -137,22 +137,22 @@ Partial Class Register
         ' 
         ' TextBoxPassword
         ' 
-        TextBoxPassword.BackColor = Color.White
+        TextBoxPassword.BackColor = Color.FromArgb(CByte(248), CByte(250), CByte(252))
         TextBoxPassword.BorderStyle = BorderStyle.FixedSingle
-        TextBoxPassword.Font = New Font("Segoe UI", 10F)
-        TextBoxPassword.ForeColor = Color.FromArgb(CByte(10), CByte(20), CByte(26))
-        TextBoxPassword.Location = New Point(36, 195)
+        TextBoxPassword.Font = New Font("Segoe UI", 11.0F)
+        TextBoxPassword.ForeColor = Color.FromArgb(CByte(31), CByte(41), CByte(55))
+        TextBoxPassword.Location = New Point(40, 243)
         TextBoxPassword.Name = "TextBoxPassword"
-        TextBoxPassword.PasswordChar = "?"c
-        TextBoxPassword.Size = New Size(360, 25)
+        TextBoxPassword.PasswordChar = "●"c
+        TextBoxPassword.Size = New Size(378, 27)
         TextBoxPassword.TabIndex = 8
         ' 
         ' LabelConfirm
         ' 
         LabelConfirm.AutoSize = True
-        LabelConfirm.Font = New Font("Segoe UI", 9F)
+        LabelConfirm.Font = New Font("Segoe UI", 9.0F)
         LabelConfirm.ForeColor = Color.LightGray
-        LabelConfirm.Location = New Point(36, 225)
+        LabelConfirm.Location = New Point(40, 287)
         LabelConfirm.Name = "LabelConfirm"
         LabelConfirm.Size = New Size(104, 15)
         LabelConfirm.TabIndex = 9
@@ -160,62 +160,62 @@ Partial Class Register
         ' 
         ' TextBoxConfirm
         ' 
-        TextBoxConfirm.BackColor = Color.White
+        TextBoxConfirm.BackColor = Color.FromArgb(CByte(248), CByte(250), CByte(252))
         TextBoxConfirm.BorderStyle = BorderStyle.FixedSingle
-        TextBoxConfirm.Font = New Font("Segoe UI", 10F)
-        TextBoxConfirm.ForeColor = Color.FromArgb(CByte(10), CByte(20), CByte(26))
-        TextBoxConfirm.Location = New Point(36, 250)
+        TextBoxConfirm.Font = New Font("Segoe UI", 11.0F)
+        TextBoxConfirm.ForeColor = Color.FromArgb(CByte(31), CByte(41), CByte(55))
+        TextBoxConfirm.Location = New Point(40, 315)
         TextBoxConfirm.Name = "TextBoxConfirm"
-        TextBoxConfirm.PasswordChar = "?"c
-        TextBoxConfirm.Size = New Size(388, 25)
-        TextBoxConfirm.TabIndex = 10
+        TextBoxConfirm.PasswordChar = "●"c
+        TextBoxConfirm.Size = New Size(400, 27)
+        TextBoxConfirm.TabIndex = 9
         ' 
         ' CheckBoxShow
         ' 
         CheckBoxShow.AutoSize = True
         CheckBoxShow.ForeColor = Color.LightGray
-        CheckBoxShow.Location = New Point(403, 199)
+        CheckBoxShow.Location = New Point(425, 256)
         CheckBoxShow.Name = "CheckBoxShow"
         CheckBoxShow.Size = New Size(15, 14)
         CheckBoxShow.TabIndex = 11
         CheckBoxShow.UseVisualStyleBackColor = True
         ' 
-        ' ButtonBack
-        ' 
-        ButtonBack.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonBack.FlatAppearance.BorderColor = Color.White
-        ButtonBack.FlatAppearance.BorderSize = 2
-        ButtonBack.FlatStyle = FlatStyle.Flat
-        ButtonBack.Font = New Font("Segoe UI Semibold", 9F, FontStyle.Bold)
-        ButtonBack.ForeColor = Color.White
-        ButtonBack.Location = New Point(384, 14)
-        ButtonBack.Name = "ButtonBack"
-        ButtonBack.Size = New Size(64, 25)
-        ButtonBack.TabIndex = 12
-        ButtonBack.Text = "Back"
-        ButtonBack.UseVisualStyleBackColor = False
-        ' 
         ' ButtonRegister
         ' 
-        ButtonRegister.BackColor = Color.FromArgb(CByte(24), CByte(30), CByte(36))
-        ButtonRegister.FlatAppearance.BorderColor = Color.White
-        ButtonRegister.FlatAppearance.BorderSize = 2
+        ButtonRegister.BackColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        ButtonRegister.Cursor = Cursors.Hand
+        ButtonRegister.FlatAppearance.BorderSize = 0
         ButtonRegister.FlatStyle = FlatStyle.Flat
-        ButtonRegister.Font = New Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        ButtonRegister.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold)
         ButtonRegister.ForeColor = Color.White
-        ButtonRegister.Location = New Point(36, 299)
+        ButtonRegister.Location = New Point(40, 365)
         ButtonRegister.Name = "ButtonRegister"
-        ButtonRegister.Size = New Size(120, 40)
-        ButtonRegister.TabIndex = 13
-        ButtonRegister.Text = "Create"
+        ButtonRegister.Size = New Size(400, 50)
+        ButtonRegister.TabIndex = 12
+        ButtonRegister.Text = "Create Account"
         ButtonRegister.UseVisualStyleBackColor = False
+        ' 
+        ' ButtonBack
+        ' 
+        ButtonBack.BackColor = Color.Transparent
+        ButtonBack.Cursor = Cursors.Hand
+        ButtonBack.FlatAppearance.BorderSize = 0
+        ButtonBack.FlatStyle = FlatStyle.Flat
+        ButtonBack.Font = New Font("Segoe UI", 10.0F, FontStyle.Bold)
+        ButtonBack.ForeColor = Color.FromArgb(CByte(107), CByte(114), CByte(128))
+        ButtonBack.Location = New Point(398, 15)
+        ButtonBack.Name = "ButtonBack"
+        ButtonBack.Size = New Size(70, 35)
+        ButtonBack.TabIndex = 11
+        ButtonBack.Text = "← Back"
+        ButtonBack.UseVisualStyleBackColor = False
         ' 
         ' Register
         ' 
-        AutoScaleDimensions = New SizeF(7F, 17F)
+        AutoScaleDimensions = New SizeF(7.0F, 17.0F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = Color.FromArgb(CByte(18), CByte(24), CByte(31))
-        ClientSize = New Size(900, 520)
+        BackColor = Color.FromArgb(CByte(243), CByte(244), CByte(246))
+        ClientSize = New Size(1000, 600)
         Controls.Add(PanelCard)
         Controls.Add(PanelLeft)
         Font = New Font("Segoe UI", 10F)

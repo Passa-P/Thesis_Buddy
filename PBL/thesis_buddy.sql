@@ -30,31 +30,10 @@ CREATE TABLE IF NOT EXISTS questions (
     qtype VARCHAR(50),
     options TEXT,
     step INT,
-    active TINYINT(1) DEFAULT 1
+    active TINYINT(1) DEFAULT 1,
+    category VARCHAR(20),
+    rule_code VARCHAR(50),
+    cf_value DOUBLE
 ) ENGINE=InnoDB;
 
--- Seed contoh pertanyaan (dikelompokkan per langkah)
--- Langkah 1: profil & minat
-INSERT INTO questions (qkey, prompt, qtype, options, step, active) VALUES
-('prodi', 'Program Studi (contoh: TI, TMJ, TMD):', 'select', 'TI,TMJ,TMD,Lainnya', 1, 1),
-('ipk', 'Berapa IPK terakhir Anda?', 'number', NULL, 1, 1),
-('interests', 'Masukkan skor minat (format: AI/ML:0.8,Data Science:0.6,...):', 'kvlist', NULL, 1, 1);
-
--- Langkah 2: kompetensi & preferensi
-INSERT INTO questions (qkey, prompt, qtype, options, step, active) VALUES
-('core_course', 'Mata kuliah inti apa yang paling Anda kuasai?', 'text', NULL, 2, 1),
-('weak_course', 'Mata kuliah apa yang paling Anda kurang kuasai?', 'text', NULL, 2, 1),
-('problem_solving', 'Tingkat kemampuan problem solving Anda (0.0–1.0):', 'select', '0.0,0.2,0.4,0.6,0.8,1.0', 2, 1);
-
--- Langkah 3: sumber daya & skill
-INSERT INTO questions (qkey, prompt, qtype, options, step, active) VALUES
-('devices', 'Perangkat yang Anda miliki (contoh: ESP32, RPi, GPU, Kamera):', 'text', NULL, 3, 1),
-('duration', 'Berapa durasi pengerjaan maksimal Anda (bulan)?', 'number', NULL, 3, 1),
-('skills', 'Masukkan skor skill (format: Python:0.8,Java:0.4,...):', 'kvlist', NULL, 3, 1);
-
--- Pertanyaan contoh tambahan (metode/output)
-INSERT INTO questions (qkey, prompt, qtype, options, step, active) VALUES
-('methods', 'Metode penelitian yang Anda pilih (Experimental,R&D,Case Study,Simulation):', 'select', 'Experimental,R&D,Case Study,Simulation', 4, 1),
-('output_type', 'Output yang diinginkan (Aplikasi,Game,IoT Device,Model AI):', 'select', 'Aplikasi,Game,IoT Device,Model AI,Other', 4, 1);
-
--- dah abis :v
+-- Data pertanyaan McClelland akan diimport otomatis dari assets/mcclelland_questionnaire.txt saat aplikasi dijalankan.

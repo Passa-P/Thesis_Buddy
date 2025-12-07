@@ -2,6 +2,7 @@
 Imports System.Text.Json
 Imports System.Drawing.Drawing2D
 Imports System.IO
+Imports System.Linq
 
 Public Class Question_Form
 
@@ -17,8 +18,6 @@ Public Class Question_Form
     Private answers As New Dictionary(Of String, Object)()
     Private currentStep As Integer = 1
 
-    Private titleLabel As Label
-    Private subtitleLabel As Label
 
     Private Sub Question_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -48,68 +47,29 @@ Public Class Question_Form
         End If
 
 
-        Try
-            If PictureLogo IsNot Nothing Then
-                PictureLogo.SizeMode = PictureBoxSizeMode.Zoom
-                PictureLogo.Width = 64
-                PictureLogo.Height = 64
-                PictureLogo.Left = 12
-                PictureLogo.Top = 12
-            End If
-        Catch
-        End Try
+        If PictureLogo IsNot Nothing Then
+            PictureLogo.SizeMode = PictureBoxSizeMode.Zoom
+            PictureLogo.Width = 280
+            PictureLogo.Height = 360
+            PictureLogo.Left = (PanelLeft.Width - PictureLogo.Width) \ 2
+            PictureLogo.Top = 40
+        End If
 
+        If LabelTitle IsNot Nothing Then
+            LabelTitle.Text = "Sistem Pakar ThesisBuddy"
+            LabelTitle.ForeColor = Color.FromArgb(59, 130, 246)
+        End If
 
-        Try
-            titleLabel = New Label()
-            titleLabel.Text = "Sistem Pakar ThesisBuddy"
-            titleLabel.ForeColor = Color.FromArgb(102, 204, 255)
-            titleLabel.AutoSize = False
-            titleLabel.Height = 36
-            titleLabel.Font = New System.Drawing.Font("Segoe UI", 14.0!, System.Drawing.FontStyle.Bold)
-            titleLabel.TextAlign = ContentAlignment.MiddleCenter
-            titleLabel.Dock = DockStyle.Top
+        If LabelSubtitle IsNot Nothing Then
+            LabelSubtitle.Text = "Rekomendasi Teknologi untuk Skripsimu"
+            LabelSubtitle.ForeColor = Color.FromArgb(107, 114, 128)
+        End If
 
-            subtitleLabel = New Label()
-            subtitleLabel.Text = "Rekomendasi Teknologi untuk Skripsimu"
-            subtitleLabel.ForeColor = Color.LightGray
-            subtitleLabel.AutoSize = False
-            subtitleLabel.Height = 20
-            subtitleLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular)
-            subtitleLabel.TextAlign = ContentAlignment.MiddleCenter
-            subtitleLabel.Dock = DockStyle.Top
-
-
-            Dim cardFound = Me.Controls.Find("PanelCard", True)
-            If cardFound.Length > 0 Then
-                Dim panelCard As Panel = DirectCast(cardFound(0), Panel)
-
-                panelCard.Controls.Add(titleLabel)
-                panelCard.Controls.Add(subtitleLabel)
-                titleLabel.BringToFront()
-                subtitleLabel.BringToFront()
-
-
-                If FlowLayoutPanelQuestions IsNot Nothing Then
-                    Dim headerHeight As Integer = titleLabel.Height + subtitleLabel.Height + 16
-                    FlowLayoutPanelQuestions.Padding = New Padding(12, headerHeight, 12, 12)
-                    FlowLayoutPanelQuestions.Dock = DockStyle.Fill
-                End If
-            Else
-
-                Me.Controls.Add(titleLabel)
-                Me.Controls.Add(subtitleLabel)
-                titleLabel.BringToFront()
-                subtitleLabel.BringToFront()
-
-                If FlowLayoutPanelQuestions IsNot Nothing Then
-                    FlowLayoutPanelQuestions.Padding = New Padding(12)
-                End If
-            End If
-        Catch
-        End Try
-
-        FlowLayoutPanelQuestions.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Bottom
+        If FlowLayoutPanelQuestions IsNot Nothing Then
+            FlowLayoutPanelQuestions.Padding = New Padding(16)
+            FlowLayoutPanelQuestions.Margin = New Padding(0, 16, 0, 0)
+            FlowLayoutPanelQuestions.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Bottom
+        End If
 
         Try
             Dim bc = Me.Controls.Find("ButtonCancel", True)
@@ -120,6 +80,7 @@ Public Class Question_Form
         End Try
 
         DatabaseHelper.EnsureQuestionsTable()
+        DatabaseHelper.SeedMcClellandQuestionnaire()
         currentStep = 1
         ShowQuestionsForStep(currentStep)
     End Sub
@@ -134,6 +95,11 @@ Public Class Question_Form
         FlowLayoutPanelQuestions.Controls.Clear()
         PanelNav.Controls.Clear()
 
+        Dim baseTextColor = Color.FromArgb(31, 41, 55)
+        Dim mutedTextColor = Color.FromArgb(107, 114, 128)
+        Dim primaryColor = Color.FromArgb(59, 130, 246)
+        Dim accentDanger = Color.FromArgb(239, 68, 68)
+        Dim inputMargin = New Padding(0, 0, 0, 12)
         Dim questions = DatabaseHelper.GetQuestionsByStep(stepIndex)
         If questions Is Nothing OrElse questions.Count = 0 Then
             Dim lbl As New Label With {.Text = "Tidak ada pertanyaan di langkah ini.", .ForeColor = Color.LightGray, .AutoSize = True}
@@ -141,11 +107,17 @@ Public Class Question_Form
         Else
             For Each q In questions
                 Dim lbl As New Label()
-                lbl.Text = q.Prompt
-                lbl.ForeColor = Color.White
+                Dim promptText As String = q.Prompt
+                If Not String.IsNullOrWhiteSpace(q.QKey) Then
+                    promptText = $"[{q.QKey}] {q.Prompt}"
+                End If
+                lbl.Text = promptText
+                lbl.ForeColor = baseTextColor
                 lbl.AutoSize = False
                 lbl.Width = ControlWidth()
-                lbl.Height = 22
+                lbl.Height = 24
+                lbl.Font = New Font("Segoe UI", 10.5F, FontStyle.Regular)
+                lbl.Margin = New Padding(0, 0, 0, 4)
                 FlowLayoutPanelQuestions.Controls.Add(lbl)
 
                 Dim typ As String = ""
@@ -155,16 +127,20 @@ Public Class Question_Form
                     Case "text", "string"
                         Dim tb As New TextBox()
                         tb.Width = ControlWidth()
-                        tb.ForeColor = Color.White
-                        tb.BackColor = Color.FromArgb(24, 30, 36)
+                        tb.ForeColor = baseTextColor
+                        tb.BackColor = Color.White
+                        tb.BorderStyle = BorderStyle.FixedSingle
+                        tb.Margin = inputMargin
                         FlowLayoutPanelQuestions.Controls.Add(tb)
                         AddHandler tb.LostFocus, Sub(s, ev) answers(q.QKey) = tb.Text
 
                     Case "number"
                         Dim tbn As New TextBox()
                         tbn.Width = ControlWidth()
-                        tbn.ForeColor = Color.White
-                        tbn.BackColor = Color.FromArgb(24, 30, 36)
+                        tbn.ForeColor = baseTextColor
+                        tbn.BackColor = Color.White
+                        tbn.BorderStyle = BorderStyle.FixedSingle
+                        tbn.Margin = inputMargin
                         FlowLayoutPanelQuestions.Controls.Add(tbn)
                         AddHandler tbn.LostFocus, Sub(s, ev)
                                                       Dim d As Double
@@ -186,7 +162,7 @@ Public Class Question_Form
                         tlp.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
                         tlp.Width = ControlWidth()
                         tlp.Padding = New Padding(0)
-                        tlp.Margin = New Padding(0, 4, 0, 8)
+                        tlp.Margin = New Padding(0, 4, 0, 12)
 
                         For i As Integer = 0 To cols - 1
                             tlp.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, CSng(100.0 / cols)))
@@ -203,7 +179,7 @@ Public Class Question_Form
 
                             Dim l As New Label()
                             l.Text = lang
-                            l.ForeColor = Color.LightGray
+                            l.ForeColor = baseTextColor
                             l.AutoSize = True
                             l.Top = 2
                             l.Left = 2
@@ -218,8 +194,8 @@ Public Class Question_Form
                             nud.Width = 90
                             nud.Top = l.Bottom + 6
                             nud.Left = 2
-                            nud.ForeColor = Color.White
-                            nud.BackColor = Color.FromArgb(34, 40, 46)
+                            nud.ForeColor = baseTextColor
+                            nud.BackColor = Color.White
                             nud.Tag = lang
 
                             AddHandler nud.ValueChanged, AddressOf LanguageNumeric_ValueChanged
@@ -249,8 +225,11 @@ Public Class Question_Form
                     Case "select"
                         Dim cb As New ComboBox()
                         cb.Width = ControlWidth()
-                        cb.ForeColor = Color.White
-                        cb.BackColor = Color.FromArgb(24, 30, 36)
+                        cb.ForeColor = baseTextColor
+                        cb.BackColor = Color.White
+                        cb.DropDownStyle = ComboBoxStyle.DropDownList
+                        cb.FlatStyle = FlatStyle.Flat
+                        cb.Margin = inputMargin
                         If Not String.IsNullOrWhiteSpace(q.Options) Then
                             cb.Items.AddRange(q.Options.Split({","c}, StringSplitOptions.RemoveEmptyEntries))
                         End If
@@ -259,22 +238,35 @@ Public Class Question_Form
 
                     Case "yesno"
                         Dim cbyn As New ComboBox()
-                        cbyn.Width = 120
+                        cbyn.Width = ControlWidth()
+                        cbyn.DropDownStyle = ComboBoxStyle.DropDownList
                         cbyn.Items.AddRange(YESNO_OPTIONS)
+                        cbyn.ForeColor = baseTextColor
+                        cbyn.BackColor = Color.White
+                        cbyn.FlatStyle = FlatStyle.Flat
+                        cbyn.Margin = inputMargin
+                        If answers.ContainsKey(q.QKey) Then
+                            Dim existing = Convert.ToString(answers(q.QKey))
+                            If Not String.IsNullOrWhiteSpace(existing) AndAlso cbyn.Items.Contains(existing) Then
+                                cbyn.SelectedItem = existing
+                            End If
+                        End If
                         FlowLayoutPanelQuestions.Controls.Add(cbyn)
                         AddHandler cbyn.SelectedIndexChanged, Sub(s, ev) If cbyn.SelectedItem IsNot Nothing Then answers(q.QKey) = cbyn.SelectedItem.ToString()
 
                     Case Else
                         Dim tbf As New TextBox()
                         tbf.Width = ControlWidth()
-                        tbf.ForeColor = Color.White
-                        tbf.BackColor = Color.FromArgb(24, 30, 36)
+                        tbf.ForeColor = baseTextColor
+                        tbf.BackColor = Color.White
+                        tbf.BorderStyle = BorderStyle.FixedSingle
+                        tbf.Margin = inputMargin
                         FlowLayoutPanelQuestions.Controls.Add(tbf)
                         AddHandler tbf.LostFocus, Sub(s, ev) answers(q.QKey) = tbf.Text
                 End Select
 
                 Dim spacer As New Label()
-                spacer.Height = 8
+                spacer.Height = 4
                 spacer.AutoSize = False
                 FlowLayoutPanelQuestions.Controls.Add(spacer)
             Next
@@ -284,16 +276,18 @@ Public Class Question_Form
         If stepIndex > 1 Then
             Dim btnPrev As New Button()
             btnPrev.Text = "Previous"
-            btnPrev.Width = 120
+            btnPrev.Width = 130
             AddHandler btnPrev.Click, Sub(s, ev)
                                           currentStep = Math.Max(1, currentStep - 1)
                                           ShowQuestionsForStep(currentStep)
                                       End Sub
-            btnPrev.Margin = New Padding(6)
+            btnPrev.Height = 42
+            btnPrev.Margin = New Padding(0, 0, 10, 0)
             btnPrev.FlatStyle = FlatStyle.Flat
-            btnPrev.ForeColor = Color.White
-            btnPrev.BackColor = Color.FromArgb(34, 40, 46)
-            btnPrev.FlatAppearance.BorderColor = Color.FromArgb(50, 50, 50)
+            btnPrev.ForeColor = mutedTextColor
+            btnPrev.BackColor = Color.White
+            btnPrev.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219)
+            btnPrev.FlatAppearance.BorderSize = 1
             PanelNav.Controls.Add(btnPrev)
         End If
 
@@ -301,44 +295,44 @@ Public Class Question_Form
         If nextQuestions IsNot Nothing AndAlso nextQuestions.Count > 0 Then
             Dim btnNext As New Button()
             btnNext.Text = "Next"
-            btnNext.Width = 120
+            btnNext.Width = 130
             AddHandler btnNext.Click, Sub(s, ev)
                                           currentStep += 1
                                           ShowQuestionsForStep(currentStep)
                                       End Sub
-            btnNext.Margin = New Padding(6)
+            btnNext.Height = 42
+            btnNext.Margin = New Padding(0, 0, 10, 0)
             btnNext.FlatStyle = FlatStyle.Flat
             btnNext.ForeColor = Color.White
-            btnNext.BackColor = Color.FromArgb(34, 40, 46)
-            btnNext.FlatAppearance.BorderColor = Color.FromArgb(50, 50, 50)
+            btnNext.BackColor = primaryColor
+            btnNext.FlatAppearance.BorderSize = 0
             PanelNav.Controls.Add(btnNext)
         Else
             Dim btnSubmit As New Button()
             btnSubmit.Text = "Submit"
-            btnSubmit.Width = 120
+            btnSubmit.Width = 130
             AddHandler btnSubmit.Click, AddressOf ButtonSubmit_Click
-            btnSubmit.Margin = New Padding(6)
-            btnSubmit.BackColor = Color.FromArgb(102, 204, 255)
+            btnSubmit.Height = 42
+            btnSubmit.Margin = New Padding(0, 0, 10, 0)
+            btnSubmit.BackColor = primaryColor
             btnSubmit.FlatStyle = FlatStyle.Flat
-            btnSubmit.ForeColor = Color.Black
+            btnSubmit.ForeColor = Color.White
+            btnSubmit.FlatAppearance.BorderSize = 0
             PanelNav.Controls.Add(btnSubmit)
         End If
 
         Dim btnCancelNav As New Button()
         btnCancelNav.Text = "Cancel"
-        btnCancelNav.Width = 120
+        btnCancelNav.Width = 130
         AddHandler btnCancelNav.Click, Sub(s, ev) Me.Close()
-        btnCancelNav.Margin = New Padding(6)
-        btnCancelNav.ForeColor = Color.White
-        btnCancelNav.BackColor = Color.FromArgb(34, 40, 46)
+        btnCancelNav.Height = 42
+        btnCancelNav.Margin = New Padding(0)
+        btnCancelNav.ForeColor = accentDanger
+        btnCancelNav.BackColor = Color.White
         btnCancelNav.FlatStyle = FlatStyle.Flat
-        btnCancelNav.FlatAppearance.BorderColor = Color.FromArgb(50, 50, 50)
+        btnCancelNav.FlatAppearance.BorderColor = accentDanger
+        btnCancelNav.FlatAppearance.BorderSize = 1
         PanelNav.Controls.Add(btnCancelNav)
-
-
-        Dim spacerLabel As New Label()
-        spacerLabel.Width = Math.Max(0, PanelNav.Width - PanelNav.Controls.Cast(Of Control)().Sum(Function(c) c.Width + c.Margin.Horizontal))
-        PanelNav.Controls.Add(spacerLabel)
     End Sub
 
     Private Sub LanguageNumeric_ValueChanged(sender As Object, e As EventArgs)
@@ -356,14 +350,14 @@ Public Class Question_Form
     Private Sub LanguageNumeric_GotFocus(sender As Object, e As EventArgs)
         Dim nud = TryCast(sender, NumericUpDown)
         If nud IsNot Nothing Then
-            nud.BackColor = Color.FromArgb(102, 204, 255)
+            nud.BackColor = Color.FromArgb(219, 234, 254)
         End If
     End Sub
 
     Private Sub LanguageNumeric_LostFocus(sender As Object, e As EventArgs)
         Dim nud = TryCast(sender, NumericUpDown)
         If nud IsNot Nothing Then
-            nud.BackColor = Color.FromArgb(34, 40, 46)
+            nud.BackColor = Color.White
         End If
     End Sub
 
@@ -418,25 +412,39 @@ Public Class Question_Form
     End Function
 
     Private Sub ButtonSubmit_Click(sender As Object, e As EventArgs)
-        If Not answers.ContainsKey("interests") Then
-            MessageBox.Show("Silakan isi minat terlebih dahulu.")
+        Dim questionBank = DatabaseHelper.GetAllActiveQuestions()
+        If questionBank Is Nothing OrElse questionBank.Count = 0 Then
+            MessageBox.Show("Daftar pertanyaan belum tersedia. Pastikan koneksi database aktif.")
             Return
         End If
-        If Not answers.ContainsKey("skills") Then
-            MessageBox.Show("Silakan isi skill terlebih dahulu.")
+
+        Dim unanswered = questionBank.Where(Function(q) q IsNot Nothing AndAlso q.Active AndAlso (Not answers.ContainsKey(q.QKey) OrElse String.IsNullOrWhiteSpace(Convert.ToString(answers(q.QKey))))).ToList()
+        If unanswered.Count > 0 Then
+            Dim firstMissing = unanswered.First()
+            Dim keyInfo = If(firstMissing IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(firstMissing.QKey), firstMissing.QKey, "pertanyaan belum terjawab")
+            MessageBox.Show($"Masih ada {unanswered.Count} pertanyaan yang belum dijawab. Contoh: {keyInfo}", "Lengkapi Jawaban", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
         Dim username As String = Environment.UserName
-        Dim recs = ExpertEngine.Evaluate(answers)
-        ExpertEngine.SaveConsultationToDb(username, answers, recs)
+        Dim profile = ExpertEngine.Evaluate(answers, questionBank)
+        ExpertEngine.SaveConsultationToDb(username, answers, profile)
 
         Dim sb As New StringBuilder()
-        sb.AppendLine("Rekomendasi:")
-        For Each r In recs
-            sb.AppendLine("- " & r)
+        sb.AppendLine($"Kategori Dominan: {profile.PrimaryCategory}")
+        sb.AppendLine()
+        sb.AppendLine("Skor Certainty Factor:")
+        For Each kvp In profile.Scores
+            sb.AppendLine($"- {kvp.Key}: {kvp.Value:P1}")
         Next
-        MessageBox.Show(sb.ToString(), "Hasil")
+
+        sb.AppendLine()
+        sb.AppendLine("Rekomendasi Judul Skripsi:")
+        For Each rec In profile.Recommendations
+            sb.AppendLine("- " & rec)
+        Next
+
+        MessageBox.Show(sb.ToString(), "Profil Motivasi")
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
