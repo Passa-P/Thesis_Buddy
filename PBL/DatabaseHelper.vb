@@ -256,6 +256,28 @@ Public Module DatabaseHelper
         End Using
     End Function
 
+    Public Function GetUserRole(username As String) As String
+        If String.IsNullOrWhiteSpace(username) Then Return "user"
+        Try
+            EnsureUsersTable()
+            Using conn As MySqlConnection = GetConnection()
+                conn.Open()
+                Dim sql As String = "SELECT role FROM users WHERE username = @username"
+                Using cmd As New MySqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@username", username)
+                    Dim roleObj = cmd.ExecuteScalar()
+                    Dim roleValue = Convert.ToString(roleObj)
+                    If String.IsNullOrWhiteSpace(roleValue) Then
+                        Return "user"
+                    End If
+                    Return roleValue
+                End Using
+            End Using
+        Catch ex As Exception
+            Return "user"
+        End Try
+    End Function
+
     Public Sub EnsureUsersTable()
         Using conn As MySqlConnection = GetConnection()
             conn.Open()

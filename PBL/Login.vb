@@ -139,8 +139,14 @@ Public Class Login
 
         Try
             If DatabaseHelper.LoginUser(username, password) Then
-                Dim mainForm As New Main_Menu()
-                mainForm.Show()
+                Dim role = DatabaseHelper.GetUserRole(username)
+                If String.Equals(role, "admin", StringComparison.OrdinalIgnoreCase) Then
+                    Dim adminForm As New Admin()
+                    adminForm.Show()
+                Else
+                    Dim mainForm As New Main_Menu()
+                    mainForm.Show()
+                End If
                 Me.Hide()
             Else
                 MessageBox.Show("Invalid username or password.")
