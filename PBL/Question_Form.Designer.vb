@@ -48,7 +48,7 @@ Partial Class Question_Form
         ' PanelCard
         ' 
         PanelCard.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        PanelCard.BackColor = Color.FromArgb(CByte(255), CByte(255), CByte(255))
+        PanelCard.BackColor = Color.FromArgb(CByte(17), CByte(24), CByte(39))
         PanelCard.Controls.Add(PictureLogo)
         PanelCard.Controls.Add(LabelTitle)
         PanelCard.Controls.Add(LabelSubtitle)
@@ -65,7 +65,7 @@ Partial Class Question_Form
         ' 
         LabelTitle.AutoSize = True
         LabelTitle.Font = New Font("Segoe UI", 22.0F, FontStyle.Bold)
-        LabelTitle.ForeColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        LabelTitle.ForeColor = Color.FromArgb(CByte(96), CByte(165), CByte(250))
         LabelTitle.Location = New Point(105, 31)
         LabelTitle.Name = "LabelTitle"
         LabelTitle.Size = New Size(345, 41)
@@ -77,7 +77,7 @@ Partial Class Question_Form
         LabelSubtitle.AutoSize = True
         LabelSubtitle.BackColor = Color.Transparent
         LabelSubtitle.Font = New Font("Segoe UI", 11.0F)
-        LabelSubtitle.ForeColor = Color.FromArgb(CByte(107), CByte(114), CByte(128))
+        LabelSubtitle.ForeColor = Color.FromArgb(CByte(148), CByte(163), CByte(184))
         LabelSubtitle.Location = New Point(105, 79)
         LabelSubtitle.Name = "LabelSubtitle"
         LabelSubtitle.Size = New Size(380, 20)
@@ -88,7 +88,7 @@ Partial Class Question_Form
         ' 
         FlowLayoutPanelQuestions.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         FlowLayoutPanelQuestions.AutoScroll = True
-        FlowLayoutPanelQuestions.BackColor = Color.FromArgb(CByte(248), CByte(250), CByte(252))
+        FlowLayoutPanelQuestions.BackColor = Color.FromArgb(CByte(28), CByte(38), CByte(57))
         FlowLayoutPanelQuestions.FlowDirection = FlowDirection.TopDown
         FlowLayoutPanelQuestions.Location = New Point(40, 110)
         FlowLayoutPanelQuestions.Name = "FlowLayoutPanelQuestions"
@@ -112,7 +112,7 @@ Partial Class Question_Form
         ' 
         ' ButtonSubmit
         ' 
-        ButtonSubmit.BackColor = Color.FromArgb(CByte(59), CByte(130), CByte(246))
+        ButtonSubmit.BackColor = Color.FromArgb(CByte(96), CByte(165), CByte(250))
         ButtonSubmit.Cursor = Cursors.Hand
         ButtonSubmit.FlatAppearance.BorderSize = 0
         ButtonSubmit.FlatStyle = FlatStyle.Flat
@@ -128,13 +128,13 @@ Partial Class Question_Form
         ' 
         ' ButtonCancel
         ' 
-        ButtonCancel.BackColor = Color.White
+        ButtonCancel.BackColor = Color.FromArgb(CByte(15), CByte(23), CByte(42))
         ButtonCancel.Cursor = Cursors.Hand
-        ButtonCancel.FlatAppearance.BorderColor = Color.FromArgb(CByte(239), CByte(68), CByte(68))
+        ButtonCancel.FlatAppearance.BorderColor = Color.FromArgb(CByte(248), CByte(113), CByte(113))
         ButtonCancel.FlatAppearance.BorderSize = 2
         ButtonCancel.FlatStyle = FlatStyle.Flat
         ButtonCancel.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold)
-        ButtonCancel.ForeColor = Color.FromArgb(CByte(239), CByte(68), CByte(68))
+        ButtonCancel.ForeColor = Color.FromArgb(CByte(248), CByte(113), CByte(113))
         ButtonCancel.Location = New Point(40, 580)
         ButtonCancel.Name = "ButtonCancel"
         ButtonCancel.Size = New Size(190, 50)
@@ -147,7 +147,7 @@ Partial Class Question_Form
         ' 
         AutoScaleDimensions = New SizeF(7.0F, 17.0F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = Color.FromArgb(CByte(243), CByte(244), CByte(246))
+        BackColor = Color.FromArgb(CByte(9), CByte(12), CByte(23))
         ClientSize = New Size(1050, 700)
         Controls.Add(PanelCard)
         Font = New Font("Segoe UI", 10.0F)

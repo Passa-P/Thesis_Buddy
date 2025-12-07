@@ -16,6 +16,18 @@ Public Partial Class Question_Form
     Private Shared ReadOnly YESNO_OPTIONS As String() = {"Ya", "Tidak"}
     Private Shared ReadOnly LANGUAGE_LIST As String() = {"Python", "Java", "C++", "C#", "JavaScript", "PHP", "Kotlin", "Go", "R", "MATLAB"}
 
+    Private Shared ReadOnly THEME_BACKGROUND As Color = Color.FromArgb(9, 12, 23)
+    Private Shared ReadOnly THEME_SURFACE As Color = Color.FromArgb(17, 24, 39)
+    Private Shared ReadOnly THEME_CARD As Color = Color.FromArgb(28, 38, 57)
+    Private Shared ReadOnly THEME_CARD_GLOW As Color = Color.FromArgb(40, 56, 84)
+    Private Shared ReadOnly THEME_TEXT As Color = Color.FromArgb(229, 231, 235)
+    Private Shared ReadOnly THEME_MUTED_TEXT As Color = Color.FromArgb(148, 163, 184)
+    Private Shared ReadOnly THEME_PRIMARY As Color = Color.FromArgb(96, 165, 250)
+    Private Shared ReadOnly THEME_DANGER As Color = Color.FromArgb(248, 113, 113)
+    Private Shared ReadOnly THEME_BORDER As Color = Color.FromArgb(56, 68, 90)
+    Private Shared ReadOnly THEME_INPUT_BG As Color = Color.FromArgb(15, 23, 42)
+    Private Shared ReadOnly THEME_INPUT_FOCUS As Color = Color.FromArgb(30, 41, 59)
+
     Private answers As New Dictionary(Of String, Object)()
     Private currentStep As Integer = 1
     Private questionLayoutHandlerAttached As Boolean = False
@@ -24,11 +36,15 @@ Public Partial Class Question_Form
 
     Private Sub Question_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        Me.BackColor = THEME_BACKGROUND
+
         Dim found = Me.Controls.Find("PanelCard", True)
         If found.Length > 0 Then
             Dim panelCard As Panel = DirectCast(found(0), Panel)
             panelCard.Left = Math.Max(20, (Me.ClientSize.Width - panelCard.Width) \ 2)
             panelCard.Top = 30
+            panelCard.BackColor = THEME_SURFACE
+            panelCard.Padding = New Padding(0, 0, 0, 12)
 
             Try
                 Dim r As Integer = 16
@@ -56,7 +72,7 @@ Public Partial Class Question_Form
 
         If LabelTitle IsNot Nothing Then
             LabelTitle.Text = "Sistem Pakar ThesisBuddy"
-            LabelTitle.ForeColor = Color.FromArgb(59, 130, 246)
+            LabelTitle.ForeColor = THEME_PRIMARY
             If PictureLogo IsNot Nothing Then
                 LabelTitle.Left = PictureLogo.Right + 18
                 LabelTitle.Top = PictureLogo.Top
@@ -65,7 +81,7 @@ Public Partial Class Question_Form
 
         If LabelSubtitle IsNot Nothing Then
             LabelSubtitle.Text = "Rekomendasi Teknologi untuk Skripsimu"
-            LabelSubtitle.ForeColor = Color.FromArgb(107, 114, 128)
+            LabelSubtitle.ForeColor = THEME_MUTED_TEXT
             If LabelTitle IsNot Nothing Then
                 LabelSubtitle.Left = LabelTitle.Left
                 LabelSubtitle.Top = LabelTitle.Bottom - 4
@@ -78,10 +94,12 @@ Public Partial Class Question_Form
             questionsPanel.Margin = New Padding(0, 16, 0, 0)
             questionsPanel.AutoScrollMargin = New Size(0, 24)
             questionsPanel.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Bottom
+            questionsPanel.BackColor = THEME_CARD
             EnableDoubleBuffer(questionsPanel)
         End If
 
         If PanelNav IsNot Nothing Then
+            PanelNav.BackColor = Color.Transparent
             EnableDoubleBuffer(PanelNav)
         End If
 
@@ -117,10 +135,10 @@ Public Partial Class Question_Form
         questionsPanel.Controls.Clear()
         PanelNav.Controls.Clear()
 
-        Dim baseTextColor = Color.FromArgb(31, 41, 55)
-        Dim mutedTextColor = Color.FromArgb(107, 114, 128)
-        Dim primaryColor = Color.FromArgb(59, 130, 246)
-        Dim accentDanger = Color.FromArgb(239, 68, 68)
+        Dim baseTextColor = THEME_TEXT
+        Dim mutedTextColor = THEME_MUTED_TEXT
+        Dim primaryColor = THEME_PRIMARY
+        Dim accentDanger = THEME_DANGER
         Dim inputMargin = New Padding(0, 0, 0, 10)
 
         AttachQuestionLayoutHandler()
@@ -155,10 +173,11 @@ Public Partial Class Question_Form
             btnPrev.Height = 42
             btnPrev.Margin = New Padding(0, 0, 10, 0)
             btnPrev.FlatStyle = FlatStyle.Flat
-            btnPrev.ForeColor = mutedTextColor
-            btnPrev.BackColor = Color.White
-            btnPrev.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219)
+            btnPrev.ForeColor = baseTextColor
+            btnPrev.BackColor = THEME_INPUT_BG
+            btnPrev.FlatAppearance.BorderColor = THEME_BORDER
             btnPrev.FlatAppearance.BorderSize = 1
+            btnPrev.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
             PanelNav.Controls.Add(btnPrev)
         End If
 
@@ -177,6 +196,7 @@ Public Partial Class Question_Form
             btnNext.ForeColor = Color.White
             btnNext.BackColor = primaryColor
             btnNext.FlatAppearance.BorderSize = 0
+            btnNext.FlatAppearance.MouseOverBackColor = Color.FromArgb(79, 139, 237)
             PanelNav.Controls.Add(btnNext)
         Else
             Dim btnSubmit As New Button()
@@ -199,10 +219,11 @@ Public Partial Class Question_Form
         btnCancelNav.Height = 42
         btnCancelNav.Margin = New Padding(0)
         btnCancelNav.ForeColor = accentDanger
-        btnCancelNav.BackColor = Color.White
+        btnCancelNav.BackColor = THEME_INPUT_BG
         btnCancelNav.FlatStyle = FlatStyle.Flat
         btnCancelNav.FlatAppearance.BorderColor = accentDanger
         btnCancelNav.FlatAppearance.BorderSize = 1
+        btnCancelNav.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
         PanelNav.Controls.Add(btnCancelNav)
     End Sub
 
@@ -236,7 +257,7 @@ Public Partial Class Question_Form
     Private Function CreateQuestionCard(question As QuestionModel, baseTextColor As Color, mutedTextColor As Color, primaryColor As Color, inputMargin As Padding, questionNumber As Integer) As Control
         Dim card As New Panel()
         card.Tag = $"question-card|{question.QKey}"
-        card.BackColor = Color.FromArgb(250, 251, 254)
+        card.BackColor = THEME_CARD
         card.Padding = New Padding(18)
         card.Margin = New Padding(0, 0, 0, 14)
         card.AutoSize = True
@@ -282,7 +303,7 @@ Public Partial Class Question_Form
         keyBadge.Padding = New Padding(8, 4, 8, 4)
         keyBadge.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
         keyBadge.ForeColor = primaryColor
-        keyBadge.BackColor = Color.FromArgb(229, 244, 255)
+        keyBadge.BackColor = Color.FromArgb(32, 48, 78)
         keyBadge.Margin = New Padding(0, 0, 8, 0)
         header.Controls.Add(keyBadge)
 
@@ -293,7 +314,7 @@ Public Partial Class Question_Form
         categoryBadge.Padding = New Padding(8, 4, 8, 4)
         categoryBadge.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular)
         categoryBadge.ForeColor = mutedTextColor
-        categoryBadge.BackColor = Color.FromArgb(244, 246, 248)
+        categoryBadge.BackColor = Color.FromArgb(36, 47, 72)
         header.Controls.Add(categoryBadge)
 
         Dim promptText As String = question.Prompt
@@ -331,7 +352,7 @@ Public Partial Class Question_Form
                 tb.MinimumSize = New Size(preferredWidth, tb.Height)
                 tb.Anchor = AnchorStyles.Left Or AnchorStyles.Right
                 tb.ForeColor = baseTextColor
-                tb.BackColor = Color.White
+                tb.BackColor = THEME_INPUT_BG
                 tb.BorderStyle = BorderStyle.FixedSingle
                 tb.Margin = inputMargin
                 AddHandler tb.LostFocus, Sub(s, ev) answers(question.QKey) = tb.Text
@@ -343,7 +364,7 @@ Public Partial Class Question_Form
                 tbn.MinimumSize = New Size(Math.Max(200, preferredWidth \ 2), tbn.Height)
                 tbn.Anchor = AnchorStyles.Left Or AnchorStyles.Right
                 tbn.ForeColor = baseTextColor
-                tbn.BackColor = Color.White
+                tbn.BackColor = THEME_INPUT_BG
                 tbn.BorderStyle = BorderStyle.FixedSingle
                 tbn.Margin = inputMargin
                 AddHandler tbn.LostFocus, Sub(s, ev)
@@ -399,7 +420,7 @@ Public Partial Class Question_Form
                     nud.Top = l.Bottom + 6
                     nud.Left = 2
                     nud.ForeColor = baseTextColor
-                    nud.BackColor = Color.White
+                    nud.BackColor = THEME_INPUT_BG
                     nud.Tag = lang
 
                     AddHandler nud.ValueChanged, AddressOf LanguageNumeric_ValueChanged
@@ -444,7 +465,7 @@ Public Partial Class Question_Form
                 tbf.MinimumSize = New Size(preferredWidth, tbf.Height)
                 tbf.Anchor = AnchorStyles.Left Or AnchorStyles.Right
                 tbf.ForeColor = baseTextColor
-                tbf.BackColor = Color.White
+                tbf.BackColor = THEME_INPUT_BG
                 tbf.BorderStyle = BorderStyle.FixedSingle
                 tbf.Margin = inputMargin
                 AddHandler tbf.LostFocus, Sub(s, ev) answers(question.QKey) = tbf.Text
@@ -456,7 +477,7 @@ Public Partial Class Question_Form
         fallback.MinimumSize = New Size(preferredWidth, fallback.Height)
         fallback.Anchor = AnchorStyles.Left Or AnchorStyles.Right
         fallback.ForeColor = baseTextColor
-        fallback.BackColor = Color.White
+        fallback.BackColor = THEME_INPUT_BG
         fallback.BorderStyle = BorderStyle.FixedSingle
         fallback.Margin = inputMargin
         AddHandler fallback.LostFocus, Sub(s, ev) answers(question.QKey) = fallback.Text
@@ -506,6 +527,9 @@ Public Partial Class Question_Form
             radio.Cursor = Cursors.Hand
             radio.FlatStyle = FlatStyle.Flat
             radio.FlatAppearance.BorderSize = 1
+            radio.FlatAppearance.BorderColor = THEME_BORDER
+            radio.FlatAppearance.CheckedBackColor = Color.Transparent
+            radio.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
             radio.Margin = New Padding(0, 0, 10, 10)
             radio.Padding = New Padding(14, 8, 14, 8)
             radio.TextAlign = ContentAlignment.MiddleCenter
@@ -526,10 +550,10 @@ Public Partial Class Question_Form
     End Function
 
     Private Sub UpdateRadioVisualState(radio As RadioButton, isChecked As Boolean, primaryColor As Color, baseTextColor As Color)
-        Dim borderColor = Color.FromArgb(209, 213, 219)
-        radio.BackColor = If(isChecked, Color.FromArgb(229, 244, 255), Color.White)
+        Dim borderColor = THEME_BORDER
+        radio.BackColor = If(isChecked, primaryColor, THEME_INPUT_BG)
         radio.FlatAppearance.BorderColor = If(isChecked, primaryColor, borderColor)
-        radio.ForeColor = If(isChecked, primaryColor, baseTextColor)
+        radio.ForeColor = If(isChecked, Color.FromArgb(15, 23, 42), baseTextColor)
     End Sub
 
     Private Sub LanguageNumeric_ValueChanged(sender As Object, e As EventArgs)
@@ -547,14 +571,14 @@ Public Partial Class Question_Form
     Private Sub LanguageNumeric_GotFocus(sender As Object, e As EventArgs)
         Dim nud = TryCast(sender, NumericUpDown)
         If nud IsNot Nothing Then
-            nud.BackColor = Color.FromArgb(219, 234, 254)
+            nud.BackColor = THEME_INPUT_FOCUS
         End If
     End Sub
 
     Private Sub LanguageNumeric_LostFocus(sender As Object, e As EventArgs)
         Dim nud = TryCast(sender, NumericUpDown)
         If nud IsNot Nothing Then
-            nud.BackColor = Color.White
+            nud.BackColor = THEME_INPUT_BG
         End If
     End Sub
 
@@ -618,11 +642,11 @@ Public Partial Class Question_Form
         If rect.Width <= 0 OrElse rect.Height <= 0 Then Return
         rect.Inflate(-1, -1)
         Using path = BuildRoundedPath(rect, 16)
-            Using fillBrush As New LinearGradientBrush(rect, Color.FromArgb(255, 255, 255), Color.FromArgb(245, 248, 255), LinearGradientMode.Vertical)
+            Using fillBrush As New LinearGradientBrush(rect, THEME_CARD_GLOW, THEME_CARD, LinearGradientMode.Vertical)
                 e.Graphics.FillPath(fillBrush, path)
             End Using
 
-            Using borderPen As New Pen(Color.FromArgb(215, 219, 230))
+            Using borderPen As New Pen(THEME_BORDER)
                 e.Graphics.DrawPath(borderPen, path)
             End Using
         End Using
