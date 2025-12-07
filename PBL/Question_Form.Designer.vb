@@ -24,14 +24,19 @@ Partial Class Question_Form
     Private Sub InitializeComponent()
         PictureLogo = New PictureBox()
         PanelCard = New Panel()
+        PanelQuestionsHost = New Panel()
+        PanelScrollTrack = New Panel()
+        PanelScrollThumb = New Panel()
+        FlowLayoutPanelQuestions = New BufferedFlowLayoutPanel()
         LabelTitle = New Label()
         LabelSubtitle = New Label()
-        FlowLayoutPanelQuestions = New FlowLayoutPanel()
         PanelNav = New FlowLayoutPanel()
         ButtonSubmit = New Button()
         ButtonCancel = New Button()
         CType(PictureLogo, ComponentModel.ISupportInitialize).BeginInit()
         PanelCard.SuspendLayout()
+        PanelQuestionsHost.SuspendLayout()
+        PanelScrollTrack.SuspendLayout()
         SuspendLayout()
         ' 
         ' PictureLogo
@@ -47,19 +52,52 @@ Partial Class Question_Form
         ' 
         ' PanelCard
         ' 
-        PanelCard.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        PanelCard.Dock = DockStyle.Fill
         PanelCard.BackColor = Color.FromArgb(CByte(17), CByte(24), CByte(39))
+        PanelCard.Controls.Add(PanelQuestionsHost)
         PanelCard.Controls.Add(PictureLogo)
         PanelCard.Controls.Add(LabelTitle)
         PanelCard.Controls.Add(LabelSubtitle)
-        PanelCard.Controls.Add(FlowLayoutPanelQuestions)
         PanelCard.Controls.Add(PanelNav)
         PanelCard.Controls.Add(ButtonSubmit)
         PanelCard.Controls.Add(ButtonCancel)
-        PanelCard.Location = New Point(33, 30)
+        PanelCard.Location = New Point(0, 0)
         PanelCard.Name = "PanelCard"
         PanelCard.Size = New Size(967, 640)
         PanelCard.TabIndex = 2
+        ' 
+        ' PanelQuestionsHost
+        ' 
+        PanelQuestionsHost.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        PanelQuestionsHost.BackColor = Color.FromArgb(CByte(28), CByte(38), CByte(57))
+        PanelQuestionsHost.Controls.Add(FlowLayoutPanelQuestions)
+        PanelQuestionsHost.Controls.Add(PanelScrollTrack)
+        PanelQuestionsHost.Location = New Point(40, 130)
+        PanelQuestionsHost.Name = "PanelQuestionsHost"
+        PanelQuestionsHost.Padding = New Padding(0)
+        PanelQuestionsHost.Size = New Size(887, 440)
+        PanelQuestionsHost.TabIndex = 8
+        ' 
+        ' PanelScrollTrack
+        ' 
+        PanelScrollTrack.BackColor = Color.FromArgb(CByte(15), CByte(23), CByte(42))
+        PanelScrollTrack.Controls.Add(PanelScrollThumb)
+        PanelScrollTrack.Dock = DockStyle.Right
+        PanelScrollTrack.Location = New Point(863, 0)
+        PanelScrollTrack.Name = "PanelScrollTrack"
+        PanelScrollTrack.Padding = New Padding(0, 12, 0, 12)
+        PanelScrollTrack.Size = New Size(24, 440)
+        PanelScrollTrack.TabIndex = 1
+        ' 
+        ' PanelScrollThumb
+        ' 
+        PanelScrollThumb.BackColor = Color.FromArgb(CByte(96), CByte(165), CByte(250))
+        PanelScrollThumb.BorderStyle = BorderStyle.None
+        PanelScrollThumb.Cursor = Cursors.Hand
+        PanelScrollThumb.Location = New Point(4, 12)
+        PanelScrollThumb.Name = "PanelScrollThumb"
+        PanelScrollThumb.Size = New Size(16, 80)
+        PanelScrollThumb.TabIndex = 0
         ' 
         ' LabelTitle
         ' 
@@ -86,14 +124,13 @@ Partial Class Question_Form
         ' 
         ' FlowLayoutPanelQuestions
         ' 
-        FlowLayoutPanelQuestions.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        FlowLayoutPanelQuestions.Dock = DockStyle.Fill
         FlowLayoutPanelQuestions.AutoScroll = True
         FlowLayoutPanelQuestions.BackColor = Color.FromArgb(CByte(28), CByte(38), CByte(57))
         FlowLayoutPanelQuestions.FlowDirection = FlowDirection.TopDown
-        FlowLayoutPanelQuestions.Location = New Point(40, 110)
         FlowLayoutPanelQuestions.Name = "FlowLayoutPanelQuestions"
         FlowLayoutPanelQuestions.Padding = New Padding(12)
-        FlowLayoutPanelQuestions.Size = New Size(887, 460)
+        FlowLayoutPanelQuestions.Size = New Size(863, 440)
         FlowLayoutPanelQuestions.TabIndex = 5
         FlowLayoutPanelQuestions.WrapContents = False
         ' 
@@ -148,25 +185,33 @@ Partial Class Question_Form
         AutoScaleDimensions = New SizeF(7.0F, 17.0F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(9), CByte(12), CByte(23))
-        ClientSize = New Size(1050, 700)
+        ClientSize = New Size(1280, 800)
         Controls.Add(PanelCard)
+        Padding = New Padding(32, 24, 32, 24)
         Font = New Font("Segoe UI", 10.0F)
-        FormBorderStyle = FormBorderStyle.FixedSingle
-        MaximizeBox = False
+        FormBorderStyle = FormBorderStyle.Sizable
+        MaximizeBox = True
+        MinimumSize = New Size(1100, 720)
         Name = "Question_Form"
         StartPosition = FormStartPosition.CenterScreen
         Text = "Question Form - ThesisBuddy"
+        WindowState = FormWindowState.Maximized
         CType(PictureLogo, ComponentModel.ISupportInitialize).EndInit()
         PanelCard.ResumeLayout(False)
         PanelCard.PerformLayout()
+        PanelQuestionsHost.ResumeLayout(False)
+        PanelScrollTrack.ResumeLayout(False)
         ResumeLayout(False)
 
     End Sub
     Friend WithEvents PictureLogo As PictureBox
     Friend WithEvents PanelCard As Panel
+    Friend WithEvents PanelQuestionsHost As Panel
+    Friend WithEvents PanelScrollTrack As Panel
+    Friend WithEvents PanelScrollThumb As Panel
     Friend WithEvents LabelTitle As Label
     Friend WithEvents LabelSubtitle As Label
-    Friend WithEvents FlowLayoutPanelQuestions As FlowLayoutPanel
+    Friend WithEvents FlowLayoutPanelQuestions As BufferedFlowLayoutPanel
     Friend WithEvents PanelNav As FlowLayoutPanel
     Friend WithEvents ButtonSubmit As Button
     Friend WithEvents ButtonCancel As Button

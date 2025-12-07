@@ -1,223 +1,266 @@
-﻿Imports System.Text
-Imports System.Text.Json
+﻿Imports System.Collections
 Imports System.Drawing.Drawing2D
-Imports System.IO
 Imports System.Linq
 Imports System.Reflection
+Imports System.Runtime.InteropServices
+Imports System.Text
+Imports System.Text.Json
 
-Public Partial Class Question_Form
+Public Class Question_Form
+    ' legacy step-based method removed in favor of pagination
+    Private Const QUESTIONS_PER_PAGE As Integer = 10
+    Private Const SB_VERT As Integer = 1
+    Private Const SB_BOTH As Integer = 3
 
-    Private Shared ReadOnly PRODI_OPTIONS As String() = {"TI", "TMJ", "TMD", "Lainnya"}
-    Private Shared ReadOnly PS_OPTIONS As String() = {"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"}
-    Private Shared ReadOnly WORK_OPTIONS As String() = {"Individu", "Kelompok"}
-    Private Shared ReadOnly DOMAIN_OPTIONS As String() = {"Algoritmik", "Desain kreatif", "Perangkat keras"}
-    Private Shared ReadOnly METHOD_OPTIONS As String() = {"Experimental", "R&D", "Case Study", "Simulation"}
-    Private Shared ReadOnly OUTPUT_OPTIONS As String() = {"Aplikasi", "Game", "IoT Device", "Model AI", "Other"}
     Private Shared ReadOnly YESNO_OPTIONS As String() = {"Ya", "Tidak"}
-    Private Shared ReadOnly LANGUAGE_LIST As String() = {"Python", "Java", "C++", "C#", "JavaScript", "PHP", "Kotlin", "Go", "R", "MATLAB"}
+    Private Shared ReadOnly LANGUAGE_LIST As String() = {
+        "Bahasa Indonesia",
+        "English",
+        "Mandarin",
+        "Japanese",
+        "Korean",
+        "German",
+        "French",
+        "Arabic",
+        "Spanish",
+        "Other"
+    }
 
-    Private Shared ReadOnly THEME_BACKGROUND As Color = Color.FromArgb(9, 12, 23)
-    Private Shared ReadOnly THEME_SURFACE As Color = Color.FromArgb(17, 24, 39)
-    Private Shared ReadOnly THEME_CARD As Color = Color.FromArgb(28, 38, 57)
-    Private Shared ReadOnly THEME_CARD_GLOW As Color = Color.FromArgb(40, 56, 84)
-    Private Shared ReadOnly THEME_TEXT As Color = Color.FromArgb(229, 231, 235)
+    Private Shared ReadOnly THEME_TEXT As Color = Color.FromArgb(226, 232, 240)
     Private Shared ReadOnly THEME_MUTED_TEXT As Color = Color.FromArgb(148, 163, 184)
-    Private Shared ReadOnly THEME_PRIMARY As Color = Color.FromArgb(96, 165, 250)
+    Private Shared ReadOnly THEME_PRIMARY As Color = Color.FromArgb(66, 130, 255)
+    Private Shared ReadOnly THEME_PRIMARY_ALT As Color = Color.FromArgb(88, 94, 255)
     Private Shared ReadOnly THEME_DANGER As Color = Color.FromArgb(248, 113, 113)
-    Private Shared ReadOnly THEME_BORDER As Color = Color.FromArgb(56, 68, 90)
-    Private Shared ReadOnly THEME_INPUT_BG As Color = Color.FromArgb(15, 23, 42)
-    Private Shared ReadOnly THEME_INPUT_FOCUS As Color = Color.FromArgb(30, 41, 59)
+    Private Shared ReadOnly THEME_CARD As Color = Color.FromArgb(25, 32, 56)
+    Private Shared ReadOnly THEME_CARD_GLOW As Color = Color.FromArgb(19, 24, 45)
+    Private Shared ReadOnly THEME_BORDER As Color = Color.FromArgb(56, 68, 99)
+    Private Shared ReadOnly THEME_BORDER_LIGHT As Color = Color.FromArgb(78, 91, 128)
+    Private Shared ReadOnly THEME_INPUT_BG As Color = Color.FromArgb(34, 41, 70)
+    Private Shared ReadOnly THEME_INPUT_FOCUS As Color = Color.FromArgb(44, 52, 87)
+    Private Shared ReadOnly THEME_SURFACE As Color = Color.FromArgb(250, 250, 255)
 
-    Private answers As New Dictionary(Of String, Object)()
-    Private currentStep As Integer = 1
-    Private questionLayoutHandlerAttached As Boolean = False
-    Private questionsPanelCache As FlowLayoutPanel
+    Private allQuestions As List(Of QuestionModel) = New List(Of QuestionModel)()
+    Private ReadOnly answers As Dictionary(Of String, Object) = New Dictionary(Of String, Object)(StringComparer.OrdinalIgnoreCase)
+    Private currentPageIndex As Integer
+    Private totalPages As Integer
 
+    Private questionLayoutHandlerAttached As Boolean
+    Private scrollEventsAttached As Boolean
+    Private handleCreatedHooked As Boolean
+    Private thumbDragging As Boolean
+    Private thumbDragOffsetY As Integer
+    Private isSyncingScroll As Boolean
 
-    Private Sub Question_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Me.BackColor = THEME_BACKGROUND
-
-        Dim found = Me.Controls.Find("PanelCard", True)
-        If found.Length > 0 Then
-            Dim panelCard As Panel = DirectCast(found(0), Panel)
-            panelCard.Left = Math.Max(20, (Me.ClientSize.Width - panelCard.Width) \ 2)
-            panelCard.Top = 30
-            panelCard.BackColor = THEME_SURFACE
-            panelCard.Padding = New Padding(0, 0, 0, 12)
-
-            Try
-                Dim r As Integer = 16
-                Dim rect As Rectangle = panelCard.ClientRectangle
-                Dim path As New Drawing2D.GraphicsPath()
-                path.AddArc(rect.X, rect.Y, r, r, 180, 90)
-                path.AddArc(rect.Right - r, rect.Y, r, r, 270, 90)
-                path.AddArc(rect.Right - r, rect.Bottom - r, r, r, 0, 90)
-                path.AddArc(rect.X, rect.Bottom - r, r, r, 90, 90)
-                path.CloseFigure()
-                panelCard.Region = New Region(path)
-            Catch
-            End Try
-        End If
-
-
-        If PictureLogo IsNot Nothing Then
-            PictureLogo.SizeMode = PictureBoxSizeMode.Zoom
-            PictureLogo.Width = 80
-            PictureLogo.Height = 80
-            PictureLogo.Left = 24
-            PictureLogo.Top = 24
-            PictureLogo.BackColor = Color.Transparent
-        End If
-
-        If LabelTitle IsNot Nothing Then
-            LabelTitle.Text = "Sistem Pakar ThesisBuddy"
-            LabelTitle.ForeColor = THEME_PRIMARY
-            If PictureLogo IsNot Nothing Then
-                LabelTitle.Left = PictureLogo.Right + 18
-                LabelTitle.Top = PictureLogo.Top
-            End If
-        End If
-
-        If LabelSubtitle IsNot Nothing Then
-            LabelSubtitle.Text = "Rekomendasi Teknologi untuk Skripsimu"
-            LabelSubtitle.ForeColor = THEME_MUTED_TEXT
-            If LabelTitle IsNot Nothing Then
-                LabelSubtitle.Left = LabelTitle.Left
-                LabelSubtitle.Top = LabelTitle.Bottom - 4
-            End If
-        End If
-
-        Dim questionsPanel = ResolveQuestionsPanel()
-        If questionsPanel IsNot Nothing Then
-            questionsPanel.Padding = New Padding(16)
-            questionsPanel.Margin = New Padding(0, 16, 0, 0)
-            questionsPanel.AutoScrollMargin = New Size(0, 24)
-            questionsPanel.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right Or AnchorStyles.Bottom
-            questionsPanel.BackColor = THEME_CARD
-            EnableDoubleBuffer(questionsPanel)
-        End If
-
-        If PanelNav IsNot Nothing Then
-            PanelNav.BackColor = Color.Transparent
-            EnableDoubleBuffer(PanelNav)
-        End If
-
-        Try
-            Dim bc = Me.Controls.Find("ButtonCancel", True)
-            If bc.Length > 0 Then
-                bc(0).Visible = False
-            End If
-        Catch
-        End Try
-
-        DatabaseHelper.EnsureQuestionsTable()
-        DatabaseHelper.SeedMcClellandQuestionnaire()
-        currentStep = 1
-        ShowQuestionsForStep(currentStep)
-    End Sub
-
-    Private Function ResolveQuestionsPanel() As FlowLayoutPanel
-        If questionsPanelCache Is Nothing OrElse questionsPanelCache.IsDisposed Then
-            Dim matches = Me.Controls.Find("FlowLayoutPanelQuestions", True)
-            If matches.Length > 0 Then
-                questionsPanelCache = TryCast(matches(0), FlowLayoutPanel)
-            End If
-        End If
-        Return questionsPanelCache
+    <DllImport("user32.dll")>
+    Private Shared Function ShowScrollBar(hWnd As IntPtr, wBar As Integer, bShow As Boolean) As Boolean
     End Function
 
-    Private Sub ShowQuestionsForStep(stepIndex As Integer)
+    Private Sub Question_Form_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Try
+            Me.DoubleBuffered = True
+            Me.WindowState = FormWindowState.Maximized
+            AttachQuestionLayoutHandler()
+            ConfigureCustomScrollSystem()
+            LoadQuestionsAndRender()
+        Catch ex As Exception
+            MessageBox.Show($"Terjadi kesalahan saat memuat pertanyaan: {ex.Message}", "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadQuestionsAndRender()
+        Try
+            Dim fetched = DatabaseHelper.GetAllActiveQuestions()
+            allQuestions = If(fetched, New List(Of QuestionModel)())
+        Catch ex As Exception
+            allQuestions = New List(Of QuestionModel)()
+            MessageBox.Show($"Gagal mengambil daftar pertanyaan dari database: {ex.Message}", "Database", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
+
+        If allQuestions Is Nothing Then
+            allQuestions = New List(Of QuestionModel)()
+        End If
+
+        allQuestions = allQuestions.
+            Where(Function(q) q IsNot Nothing AndAlso q.Active).
+            OrderBy(Function(q) q.QStep).
+            ThenBy(Function(q) q.Id).
+            ToList()
+
+        answers.Clear()
+        totalPages = If(allQuestions.Count = 0, 0, CInt(Math.Ceiling(allQuestions.Count / CDbl(QUESTIONS_PER_PAGE))))
+        EnsureCurrentPageWithinBounds()
+        RenderCurrentPage()
+    End Sub
+
+    Private Sub EnsureCurrentPageWithinBounds()
+        If totalPages <= 0 Then
+            currentPageIndex = 0
+        Else
+            currentPageIndex = Math.Max(0, Math.Min(currentPageIndex, totalPages - 1))
+        End If
+    End Sub
+
+    Private Function GetPageQuestions() As List(Of QuestionModel)
+        If allQuestions Is Nothing OrElse allQuestions.Count = 0 Then
+            Return New List(Of QuestionModel)()
+        End If
+
+        Dim startIndex = currentPageIndex * QUESTIONS_PER_PAGE
+        Return allQuestions.Skip(startIndex).Take(QUESTIONS_PER_PAGE).ToList()
+    End Function
+
+    Private Sub RenderCurrentPage()
         Dim questionsPanel = ResolveQuestionsPanel()
         If questionsPanel Is Nothing Then Return
-
-        questionsPanel.SuspendLayout()
-        questionsPanel.Controls.Clear()
-        PanelNav.Controls.Clear()
+        EnsureCurrentPageWithinBounds()
 
         Dim baseTextColor = THEME_TEXT
         Dim mutedTextColor = THEME_MUTED_TEXT
         Dim primaryColor = THEME_PRIMARY
-        Dim accentDanger = THEME_DANGER
-        Dim inputMargin = New Padding(0, 0, 0, 10)
+        Dim inputMargin = New Padding(0, 0, 0, 12)
 
-        AttachQuestionLayoutHandler()
+        questionsPanel.SuspendLayout()
+        questionsPanel.Controls.Clear()
 
-        Dim questions = DatabaseHelper.GetQuestionsByStep(stepIndex)
-        If questions Is Nothing OrElse questions.Count = 0 Then
-            Dim lbl As New Label With {
-                .Text = "Tidak ada pertanyaan di langkah ini.",
-                .ForeColor = mutedTextColor,
-                .AutoSize = True,
-                .Margin = New Padding(0, 10, 0, 0)
-            }
-            questionsPanel.Controls.Add(lbl)
+        Dim currentPageQuestions = GetPageQuestions()
+        If currentPageQuestions.Count = 0 Then
+            questionsPanel.Controls.Add(BuildEmptyStateCard())
         Else
-            For i As Integer = 0 To questions.Count - 1
-                Dim card = CreateQuestionCard(questions(i), baseTextColor, mutedTextColor, primaryColor, inputMargin, i + 1)
+            For i As Integer = 0 To currentPageQuestions.Count - 1
+                Dim questionNumber = currentPageIndex * QUESTIONS_PER_PAGE + i + 1
+                Dim card = CreateQuestionCard(currentPageQuestions(i), baseTextColor, mutedTextColor, primaryColor, inputMargin, questionNumber)
                 questionsPanel.Controls.Add(card)
             Next
         End If
 
         questionsPanel.ResumeLayout()
         ApplyQuestionCardWidth()
+        UpdateSubtitleForPage()
+        RenderNavigationControls()
+        UpdateCustomScrollBar()
+    End Sub
 
-        If stepIndex > 1 Then
-            Dim btnPrev As New Button()
-            btnPrev.Text = "Previous"
-            btnPrev.Width = 130
-            AddHandler btnPrev.Click, Sub(s, ev)
-                                          currentStep = Math.Max(1, currentStep - 1)
-                                          ShowQuestionsForStep(currentStep)
-                                      End Sub
-            btnPrev.Height = 42
-            btnPrev.Margin = New Padding(0, 0, 10, 0)
-            btnPrev.FlatStyle = FlatStyle.Flat
-            btnPrev.ForeColor = baseTextColor
-            btnPrev.BackColor = THEME_INPUT_BG
-            btnPrev.FlatAppearance.BorderColor = THEME_BORDER
-            btnPrev.FlatAppearance.BorderSize = 1
-            btnPrev.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
-            PanelNav.Controls.Add(btnPrev)
+    Private Function BuildEmptyStateCard() As Control
+        Dim panel As New Panel()
+        panel.AutoSize = True
+        panel.Padding = New Padding(12, 32, 12, 32)
+        panel.Margin = New Padding(0)
+
+        Dim lbl As New Label()
+        lbl.AutoSize = True
+        lbl.TextAlign = ContentAlignment.MiddleCenter
+        lbl.Text = "Pertanyaan belum tersedia atau tidak aktif."
+        lbl.Font = New Font("Segoe UI", 11.0F, FontStyle.Italic)
+        lbl.ForeColor = THEME_MUTED_TEXT
+
+        panel.Controls.Add(lbl)
+        Return panel
+    End Function
+
+    Private Function ResolveQuestionsPanel() As FlowLayoutPanel
+        Return FlowLayoutPanelQuestions
+    End Function
+
+    Private Function ResolveQuestionsHost() As Panel
+        Return PanelQuestionsHost
+    End Function
+
+    Private Function ResolveScrollTrack() As Panel
+        Return PanelScrollTrack
+    End Function
+
+    Private Function ResolveScrollThumb() As Panel
+        Return PanelScrollThumb
+    End Function
+
+    Private Function IsLastPage() As Boolean
+        If totalPages <= 0 Then Return True
+        Return currentPageIndex >= totalPages - 1
+    End Function
+
+    Private Function ValidateCurrentPage() As Boolean
+        If allQuestions Is Nothing OrElse allQuestions.Count = 0 Then Return True
+        Dim pageQuestions = GetPageQuestions()
+        For Each q In pageQuestions
+            If q IsNot Nothing AndAlso q.Active AndAlso Not HasAnswerForQuestion(q.QKey) Then
+                Return False
+            End If
+        Next
+        Return True
+    End Function
+
+    Private Function HasAnswerForQuestion(qKey As String) As Boolean
+        If String.IsNullOrWhiteSpace(qKey) Then Return False
+        If answers Is Nothing OrElse Not answers.ContainsKey(qKey) Then Return False
+        Dim raw = answers(qKey)
+        If raw Is Nothing Then Return False
+
+        If TypeOf raw Is String Then
+            Return Not String.IsNullOrWhiteSpace(Convert.ToString(raw))
         End If
 
-        Dim nextQuestions = DatabaseHelper.GetQuestionsByStep(stepIndex + 1)
-        If nextQuestions IsNot Nothing AndAlso nextQuestions.Count > 0 Then
-            Dim btnNext As New Button()
-            btnNext.Text = "Next"
-            btnNext.Width = 130
-            AddHandler btnNext.Click, Sub(s, ev)
-                                          currentStep += 1
-                                          ShowQuestionsForStep(currentStep)
-                                      End Sub
-            btnNext.Height = 42
-            btnNext.Margin = New Padding(0, 0, 10, 0)
-            btnNext.FlatStyle = FlatStyle.Flat
-            btnNext.ForeColor = Color.White
-            btnNext.BackColor = primaryColor
-            btnNext.FlatAppearance.BorderSize = 0
-            btnNext.FlatAppearance.MouseOverBackColor = Color.FromArgb(79, 139, 237)
-            PanelNav.Controls.Add(btnNext)
-        Else
-            Dim btnSubmit As New Button()
-            btnSubmit.Text = "Submit"
-            btnSubmit.Width = 130
-            AddHandler btnSubmit.Click, AddressOf ButtonSubmit_Click
-            btnSubmit.Height = 42
-            btnSubmit.Margin = New Padding(0, 0, 10, 0)
-            btnSubmit.BackColor = primaryColor
-            btnSubmit.FlatStyle = FlatStyle.Flat
-            btnSubmit.ForeColor = Color.White
-            btnSubmit.FlatAppearance.BorderSize = 0
-            PanelNav.Controls.Add(btnSubmit)
+        If TypeOf raw Is Boolean Then Return True
+
+        If TypeOf raw Is IConvertible Then
+            Return True
         End If
+
+        Dim dict = TryCast(raw, Collections.IDictionary)
+        If dict IsNot Nothing Then
+            Return dict.Count > 0
+        End If
+
+        Dim enumerable = TryCast(raw, IEnumerable)
+        If enumerable IsNot Nothing Then
+            Return enumerable.Cast(Of Object)().Any()
+        End If
+
+        Return True
+    End Function
+
+    Private Sub RenderNavigationControls()
+        If PanelNav Is Nothing Then Return
+        PanelNav.SuspendLayout()
+        PanelNav.Controls.Clear()
+
+        Dim baseTextColor = THEME_TEXT
+        Dim primaryColor = THEME_PRIMARY
+        Dim accentDanger = THEME_DANGER
+
+        Dim btnPrev As New Button()
+        btnPrev.Text = "Previous"
+        btnPrev.Width = 130
+        btnPrev.Enabled = currentPageIndex > 0
+        AddHandler btnPrev.Click, Sub(s, e) NavigatePrevious()
+        btnPrev.Height = 42
+        btnPrev.Margin = New Padding(0, 0, 16, 0)
+        btnPrev.FlatStyle = FlatStyle.Flat
+        btnPrev.ForeColor = baseTextColor
+        btnPrev.BackColor = THEME_INPUT_BG
+        btnPrev.FlatAppearance.BorderColor = THEME_BORDER
+        btnPrev.FlatAppearance.BorderSize = 1
+        btnPrev.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
+        PanelNav.Controls.Add(btnPrev)
+
+        Dim btnNext As New Button()
+        btnNext.Text = If(IsLastPage(), "Submit", "Next")
+        btnNext.Width = 130
+        AddHandler btnNext.Click, Sub(s, e) NavigateNextOrSubmit()
+        btnNext.Height = 42
+        btnNext.Margin = New Padding(0, 0, 16, 0)
+        btnNext.FlatStyle = FlatStyle.Flat
+        btnNext.ForeColor = Color.White
+        btnNext.BackColor = primaryColor
+        btnNext.FlatAppearance.BorderSize = 0
+        btnNext.FlatAppearance.MouseOverBackColor = Color.FromArgb(79, 139, 237)
+        PanelNav.Controls.Add(btnNext)
 
         Dim btnCancelNav As New Button()
         btnCancelNav.Text = "Cancel"
         btnCancelNav.Width = 130
-        AddHandler btnCancelNav.Click, Sub(s, ev) Me.Close()
+        AddHandler btnCancelNav.Click, Sub(s, e) Me.Close()
         btnCancelNav.Height = 42
-        btnCancelNav.Margin = New Padding(0)
+        btnCancelNav.Margin = New Padding(24, 0, 0, 0)
         btnCancelNav.ForeColor = accentDanger
         btnCancelNav.BackColor = THEME_INPUT_BG
         btnCancelNav.FlatStyle = FlatStyle.Flat
@@ -225,6 +268,79 @@ Public Partial Class Question_Form
         btnCancelNav.FlatAppearance.BorderSize = 1
         btnCancelNav.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
         PanelNav.Controls.Add(btnCancelNav)
+
+        PanelNav.ResumeLayout()
+    End Sub
+
+    Private Sub UpdateSubtitleForPage()
+        If LabelSubtitle Is Nothing Then Return
+        Dim total = If(allQuestions Is Nothing, 0, allQuestions.Count)
+        If total = 0 Then
+            LabelSubtitle.Text = "Tidak ada pertanyaan aktif."
+            Return
+        End If
+
+        Dim startNumber = currentPageIndex * QUESTIONS_PER_PAGE + 1
+        Dim endNumber = Math.Min(total, startNumber + QUESTIONS_PER_PAGE - 1)
+        LabelSubtitle.Text = $"Pertanyaan {startNumber}-{endNumber} dari {total}"
+    End Sub
+
+    Private Sub NavigatePrevious()
+        If currentPageIndex = 0 Then Return
+        currentPageIndex -= 1
+        RenderCurrentPage()
+    End Sub
+
+    Private Sub NavigateNextOrSubmit()
+        If Not ValidateCurrentPage() Then
+            MessageBox.Show("Pastikan semua pertanyaan di halaman ini sudah dijawab.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If IsLastPage() Then
+            ButtonSubmit_Click(Me, EventArgs.Empty)
+        Else
+            currentPageIndex += 1
+            RenderCurrentPage()
+        End If
+    End Sub
+
+    ' legacy ShowQuestionsForStep removed
+
+    Private Sub ConfigureCustomScrollSystem()
+        Dim panel = ResolveQuestionsPanel()
+        Dim track = ResolveScrollTrack()
+        Dim thumb = ResolveScrollThumb()
+        If panel Is Nothing OrElse track Is Nothing OrElse thumb Is Nothing Then Return
+
+        Dim host = ResolveQuestionsHost()
+        EnableDoubleBuffer(panel)
+        If host IsNot Nothing Then
+            EnableDoubleBuffer(host)
+        End If
+
+        If Not scrollEventsAttached Then
+            AddHandler panel.Scroll, AddressOf QuestionsPanel_Scrolled
+            AddHandler panel.ControlAdded, AddressOf QuestionsPanel_ControlChanged
+            AddHandler panel.ControlRemoved, AddressOf QuestionsPanel_ControlChanged
+            AddHandler panel.Layout, AddressOf QuestionsPanel_LayoutChanged
+            If host IsNot Nothing Then
+                AddHandler host.Resize, AddressOf QuestionsHost_Resized
+            End If
+            AddHandler track.MouseDown, AddressOf ScrollTrack_MouseDown
+            AddHandler thumb.MouseDown, AddressOf ScrollThumb_MouseDown
+            AddHandler thumb.MouseMove, AddressOf ScrollThumb_MouseMove
+            AddHandler thumb.MouseUp, AddressOf ScrollThumb_MouseUp
+            scrollEventsAttached = True
+        End If
+
+        If Not handleCreatedHooked Then
+            AddHandler panel.HandleCreated, AddressOf QuestionsPanel_HandleCreated
+            handleCreatedHooked = True
+        End If
+
+        HideNativeScrollbars(panel)
+        UpdateCustomScrollBar()
     End Sub
 
     Private Sub AttachQuestionLayoutHandler()
@@ -241,9 +357,150 @@ Public Partial Class Question_Form
         If availableWidth <= 0 Then Return
         For Each ctrl As Control In questionsPanel.Controls
             If TypeOf ctrl Is Panel AndAlso ctrl.Tag IsNot Nothing AndAlso ctrl.Tag.ToString().StartsWith("question-card") Then
-                ctrl.Width = Math.Max(availableWidth, 200)
+                Dim targetWidth = Math.Max(availableWidth, 320)
+                ctrl.SuspendLayout()
+                ctrl.AutoSize = False
+                ctrl.MinimumSize = New Size(targetWidth, 0)
+                ctrl.MaximumSize = New Size(targetWidth, Integer.MaxValue)
+                ctrl.Width = targetWidth
+                Dim preferred = ctrl.GetPreferredSize(New Size(targetWidth, 0))
+                If preferred.Height > 0 Then
+                    ctrl.Height = preferred.Height
+                End If
+                ctrl.ResumeLayout(True)
             End If
         Next
+    End Sub
+
+    Private Sub HideNativeScrollbars(panel As ScrollableControl)
+        If panel Is Nothing OrElse Not panel.IsHandleCreated Then Return
+        ShowScrollBar(panel.Handle, SB_VERT, False)
+        ShowScrollBar(panel.Handle, SB_BOTH, False)
+    End Sub
+
+    Private Sub QuestionsPanel_HandleCreated(sender As Object, e As EventArgs)
+        HideNativeScrollbars(TryCast(sender, ScrollableControl))
+    End Sub
+
+    Private Sub QuestionsPanel_Scrolled(sender As Object, e As ScrollEventArgs)
+        If isSyncingScroll Then Return
+        UpdateCustomScrollBar()
+        Dim ctrl = TryCast(sender, Control)
+        If ctrl IsNot Nothing Then
+            ctrl.Invalidate()
+        End If
+    End Sub
+
+    Private Sub QuestionsPanel_ControlChanged(sender As Object, e As ControlEventArgs)
+        UpdateCustomScrollBar()
+    End Sub
+
+    Private Sub QuestionsPanel_LayoutChanged(sender As Object, e As LayoutEventArgs)
+        UpdateCustomScrollBar()
+    End Sub
+
+    Private Sub QuestionsHost_Resized(sender As Object, e As EventArgs)
+        UpdateCustomScrollBar()
+    End Sub
+
+    Private Sub UpdateCustomScrollBar()
+        Dim panel = ResolveQuestionsPanel()
+        Dim track = ResolveScrollTrack()
+        Dim thumb = ResolveScrollThumb()
+        If panel Is Nothing OrElse track Is Nothing OrElse thumb Is Nothing Then Return
+
+        Dim viewport = panel.ClientSize.Height
+        Dim content = panel.DisplayRectangle.Height
+        Dim maxOffset = Math.Max(0, content - viewport)
+        Dim hasScroll = maxOffset > 2
+
+        track.Visible = hasScroll
+        thumb.Visible = hasScroll
+        If Not hasScroll Then
+            thumb.Top = track.Padding.Top
+            thumbDragging = False
+            HideNativeScrollbars(panel)
+            Return
+        End If
+
+        Dim innerHeight = Math.Max(1, track.Height - track.Padding.Vertical)
+        Dim thumbHeight = Math.Max(32, CInt(innerHeight * (viewport / Math.Max(viewport, content))))
+        thumb.Height = Math.Min(innerHeight, thumbHeight)
+
+        Dim trackRange = Math.Max(1, innerHeight - thumb.Height)
+        Dim currentOffset = Math.Max(0, -panel.AutoScrollPosition.Y)
+        Dim thumbOffset = CInt(trackRange * (currentOffset / Math.Max(1, maxOffset)))
+        thumb.Top = track.Padding.Top + thumbOffset
+
+        HideNativeScrollbars(panel)
+    End Sub
+
+    Private Sub ScrollTrack_MouseDown(sender As Object, e As MouseEventArgs)
+        If e.Button <> MouseButtons.Left Then Return
+        Dim thumb = ResolveScrollThumb()
+        Dim halfHeight = If(thumb IsNot Nothing, thumb.Height \ 2, 0)
+        ApplyThumbPositionAndScroll(e.Y - halfHeight)
+    End Sub
+
+    Private Sub ScrollThumb_MouseDown(sender As Object, e As MouseEventArgs)
+        If e.Button <> MouseButtons.Left Then Return
+        thumbDragging = True
+        thumbDragOffsetY = e.Y
+        Dim thumb = ResolveScrollThumb()
+        If thumb IsNot Nothing Then
+            thumb.Capture = True
+        End If
+    End Sub
+
+    Private Sub ScrollThumb_MouseMove(sender As Object, e As MouseEventArgs)
+        If Not thumbDragging Then Return
+        Dim thumb = ResolveScrollThumb()
+        If thumb Is Nothing Then Return
+        Dim delta = e.Y - thumbDragOffsetY
+        ApplyThumbPositionAndScroll(thumb.Top + delta)
+    End Sub
+
+    Private Sub ScrollThumb_MouseUp(sender As Object, e As MouseEventArgs)
+        If e.Button <> MouseButtons.Left Then Return
+        thumbDragging = False
+        Dim thumb = ResolveScrollThumb()
+        If thumb IsNot Nothing Then
+            thumb.Capture = False
+        End If
+    End Sub
+
+    Private Sub ApplyThumbPositionAndScroll(requestedTop As Integer)
+        Dim panel = ResolveQuestionsPanel()
+        Dim track = ResolveScrollTrack()
+        Dim thumb = ResolveScrollThumb()
+        If panel Is Nothing OrElse track Is Nothing OrElse thumb Is Nothing Then Return
+
+        Dim innerTop = track.Padding.Top
+        Dim innerBottom = track.Height - track.Padding.Bottom
+        Dim maxTop = innerBottom - thumb.Height
+        Dim clampedTop = Math.Max(innerTop, Math.Min(maxTop, requestedTop))
+        thumb.Top = clampedTop
+
+        Dim viewport = panel.ClientSize.Height
+        Dim content = panel.DisplayRectangle.Height
+        Dim maxOffset = Math.Max(0, content - viewport)
+        If maxOffset <= 0 Then
+            isSyncingScroll = True
+            panel.AutoScrollPosition = New Point(0, 0)
+            isSyncingScroll = False
+            Return
+        End If
+
+        Dim travelRange = Math.Max(1, (innerBottom - innerTop) - thumb.Height)
+        Dim relativeTop = clampedTop - innerTop
+        Dim scrollFraction = relativeTop / CDbl(travelRange)
+        Dim targetOffset = CInt(scrollFraction * maxOffset)
+
+        isSyncingScroll = True
+        panel.AutoScrollPosition = New Point(0, targetOffset)
+        isSyncingScroll = False
+        panel.Invalidate()
+        UpdateCustomScrollBar()
     End Sub
 
     Private Sub EnableDoubleBuffer(ctrl As Control)
@@ -256,7 +513,8 @@ Public Partial Class Question_Form
 
     Private Function CreateQuestionCard(question As QuestionModel, baseTextColor As Color, mutedTextColor As Color, primaryColor As Color, inputMargin As Padding, questionNumber As Integer) As Control
         Dim card As New Panel()
-        card.Tag = $"question-card|{question.QKey}"
+        Dim accentColor = If(questionNumber Mod 2 = 0, THEME_PRIMARY, THEME_PRIMARY_ALT)
+        card.Tag = $"question-card|{question.QKey}|{accentColor.ToArgb()}"
         card.BackColor = THEME_CARD
         card.Padding = New Padding(18)
         card.Margin = New Padding(0, 0, 0, 14)
@@ -293,28 +551,29 @@ Public Partial Class Question_Form
         numberBadge.Padding = New Padding(10, 4, 10, 4)
         numberBadge.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
         numberBadge.ForeColor = Color.White
-        numberBadge.BackColor = Color.FromArgb(37, 99, 235)
+        numberBadge.BackColor = accentColor
         numberBadge.Margin = New Padding(0, 0, 8, 0)
         header.Controls.Add(numberBadge)
 
         Dim keyBadge As New Label()
-        keyBadge.Text = If(String.IsNullOrWhiteSpace(question.QKey), "QUESTION", question.QKey)
+        Dim keyText = If(String.IsNullOrWhiteSpace(question.QKey), "QUESTION", question.QKey)
+        keyBadge.Text = keyText.ToUpperInvariant()
         keyBadge.AutoSize = True
         keyBadge.Padding = New Padding(8, 4, 8, 4)
         keyBadge.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
-        keyBadge.ForeColor = primaryColor
+        keyBadge.ForeColor = accentColor
         keyBadge.BackColor = Color.FromArgb(32, 48, 78)
         keyBadge.Margin = New Padding(0, 0, 8, 0)
         header.Controls.Add(keyBadge)
 
         Dim categoryText = If(String.IsNullOrWhiteSpace(question.Category), "General", question.Category)
         Dim categoryBadge As New Label()
-        categoryBadge.Text = categoryText
+        categoryBadge.Text = categoryText.ToUpperInvariant()
         categoryBadge.AutoSize = True
         categoryBadge.Padding = New Padding(8, 4, 8, 4)
         categoryBadge.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular)
-        categoryBadge.ForeColor = mutedTextColor
-        categoryBadge.BackColor = Color.FromArgb(36, 47, 72)
+        categoryBadge.ForeColor = Color.FromArgb(203, 213, 225)
+        categoryBadge.BackColor = Color.FromArgb(44, 57, 82)
         header.Controls.Add(categoryBadge)
 
         Dim promptText As String = question.Prompt
@@ -527,7 +786,7 @@ Public Partial Class Question_Form
             radio.Cursor = Cursors.Hand
             radio.FlatStyle = FlatStyle.Flat
             radio.FlatAppearance.BorderSize = 1
-            radio.FlatAppearance.BorderColor = THEME_BORDER
+            radio.FlatAppearance.BorderColor = THEME_BORDER_LIGHT
             radio.FlatAppearance.CheckedBackColor = Color.Transparent
             radio.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
             radio.Margin = New Padding(0, 0, 10, 10)
@@ -550,10 +809,10 @@ Public Partial Class Question_Form
     End Function
 
     Private Sub UpdateRadioVisualState(radio As RadioButton, isChecked As Boolean, primaryColor As Color, baseTextColor As Color)
-        Dim borderColor = THEME_BORDER
+        Dim borderColor = THEME_BORDER_LIGHT
         radio.BackColor = If(isChecked, primaryColor, THEME_INPUT_BG)
         radio.FlatAppearance.BorderColor = If(isChecked, primaryColor, borderColor)
-        radio.ForeColor = If(isChecked, Color.FromArgb(15, 23, 42), baseTextColor)
+        radio.ForeColor = If(isChecked, THEME_SURFACE, baseTextColor)
     End Sub
 
     Private Sub LanguageNumeric_ValueChanged(sender As Object, e As EventArgs)
@@ -641,6 +900,17 @@ Public Partial Class Question_Form
         Dim rect = card.ClientRectangle
         If rect.Width <= 0 OrElse rect.Height <= 0 Then Return
         rect.Inflate(-1, -1)
+        Dim accentColor = THEME_PRIMARY
+        If card.Tag IsNot Nothing Then
+            Dim tagParts = card.Tag.ToString().Split("|"c)
+            If tagParts.Length >= 3 Then
+                Dim accentArgb As Integer
+                If Integer.TryParse(tagParts(2), accentArgb) Then
+                    accentColor = Color.FromArgb(accentArgb)
+                End If
+            End If
+        End If
+
         Using path = BuildRoundedPath(rect, 16)
             Using fillBrush As New LinearGradientBrush(rect, THEME_CARD_GLOW, THEME_CARD, LinearGradientMode.Vertical)
                 e.Graphics.FillPath(fillBrush, path)
@@ -648,6 +918,12 @@ Public Partial Class Question_Form
 
             Using borderPen As New Pen(THEME_BORDER)
                 e.Graphics.DrawPath(borderPen, path)
+            End Using
+
+            Dim accentRect = rect
+            accentRect.Height = Math.Min(6, rect.Height)
+            Using accentBrush As New LinearGradientBrush(accentRect, accentColor, Color.FromArgb(120, accentColor), LinearGradientMode.Horizontal)
+                e.Graphics.FillRectangle(accentBrush, accentRect.Left + 6, accentRect.Top + 3, accentRect.Width - 12, 3)
             End Using
         End Using
     End Sub
@@ -672,14 +948,18 @@ Public Partial Class Question_Form
         Return Nothing
     End Function
 
-    Private Sub ButtonSubmit_Click(sender As Object, e As EventArgs)
-        Dim questionBank = DatabaseHelper.GetAllActiveQuestions()
+    Private Sub ButtonSubmit_Click(sender As Object, e As EventArgs) Handles ButtonSubmit.Click
+        Dim questionBank = allQuestions
+        If questionBank Is Nothing OrElse questionBank.Count = 0 Then
+            questionBank = DatabaseHelper.GetAllActiveQuestions()
+        End If
+
         If questionBank Is Nothing OrElse questionBank.Count = 0 Then
             MessageBox.Show("Daftar pertanyaan belum tersedia. Pastikan koneksi database aktif.")
             Return
         End If
 
-        Dim unanswered = questionBank.Where(Function(q) q IsNot Nothing AndAlso q.Active AndAlso (Not answers.ContainsKey(q.QKey) OrElse String.IsNullOrWhiteSpace(Convert.ToString(answers(q.QKey))))).ToList()
+        Dim unanswered = questionBank.Where(Function(q) q IsNot Nothing AndAlso q.Active AndAlso Not HasAnswerForQuestion(q.QKey)).ToList()
         If unanswered.Count > 0 Then
             Dim firstMissing = unanswered.First()
             Dim keyInfo = If(firstMissing IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(firstMissing.QKey), firstMissing.QKey, "pertanyaan belum terjawab")
