@@ -787,7 +787,8 @@ Public Class Question_Form
             radio.FlatStyle = FlatStyle.Flat
             radio.FlatAppearance.BorderSize = 1
             radio.FlatAppearance.BorderColor = THEME_BORDER_LIGHT
-            radio.FlatAppearance.CheckedBackColor = Color.Transparent
+            ' use a slightly darker blue for the checked background so selected option is clearer
+            radio.FlatAppearance.CheckedBackColor = Color.FromArgb(79, 139, 237)
             radio.FlatAppearance.MouseOverBackColor = THEME_INPUT_FOCUS
             radio.Margin = New Padding(0, 0, 10, 10)
             radio.Padding = New Padding(14, 8, 14, 8)
@@ -809,10 +810,13 @@ Public Class Question_Form
     End Function
 
     Private Sub UpdateRadioVisualState(radio As RadioButton, isChecked As Boolean, primaryColor As Color, baseTextColor As Color)
-        Dim borderColor = THEME_BORDER_LIGHT
-        radio.BackColor = If(isChecked, primaryColor, THEME_INPUT_BG)
-        radio.FlatAppearance.BorderColor = If(isChecked, primaryColor, borderColor)
-        radio.ForeColor = If(isChecked, THEME_SURFACE, baseTextColor)
+    Dim borderColor = THEME_BORDER_LIGHT
+    ' match the checked background to the color used elsewhere for hover/active
+    Dim checkedBg As Color = Color.FromArgb(79, 139, 237)
+    radio.BackColor = If(isChecked, checkedBg, THEME_INPUT_BG)
+    ' show a white border when the option is selected so it stands out against dark backgrounds
+    radio.FlatAppearance.BorderColor = If(isChecked, Color.White, borderColor)
+    radio.ForeColor = If(isChecked, THEME_SURFACE, baseTextColor)
     End Sub
 
     Private Sub LanguageNumeric_ValueChanged(sender As Object, e As EventArgs)
