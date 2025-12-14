@@ -38,23 +38,50 @@ Public Class MotivationInferenceEngine
         Dim scores = CategoryKeys.ToDictionary(Function(k) k, Function(__) 0.0R, StringComparer.OrdinalIgnoreCase)
         Dim evidence = CategoryKeys.ToDictionary(Function(k) k, Function(__) New List(Of String)(), StringComparer.OrdinalIgnoreCase)
 
+        ' Per-kategori: hitung coverage dan skor per kategori
+        Dim totalRuleCountPerCat = CategoryKeys.ToDictionary(Function(k) k, Function(__) 0, StringComparer.OrdinalIgnoreCase)
+        Dim answeredRuleCountPerCat = CategoryKeys.ToDictionary(Function(k) k, Function(__) 0, StringComparer.OrdinalIgnoreCase)
+
         For Each rule In rules
+            Dim categoryKey = SanitizeCategory(rule.Category)
+            totalRuleCountPerCat(categoryKey) += 1
             Dim weight = ExtractAnswerWeight(safeAnswers, rule.FactKey)
             If weight <= 0 Then Continue For
+            answeredRuleCountPerCat(categoryKey) += 1
             Dim contribution = Clamp(rule.Certainty) * weight
-            Dim categoryKey = SanitizeCategory(rule.Category)
             Dim current = scores(categoryKey)
             scores(categoryKey) = CombineCertainty(current, contribution)
             evidence(categoryKey).Add(BuildEvidenceText(rule))
         Next
 
-        Dim primary = scores.OrderByDescending(Function(kvp) kvp.Value).Select(Function(kvp) kvp.Key).FirstOrDefault()
-        If String.IsNullOrWhiteSpace(primary) Then
-            primary = "nAch"
-        End If
+        ' Apply coverage per category
+        For Each k In scores.Keys.ToList()
+            Dim totalCat = Math.Max(1, totalRuleCountPerCat(k))
+            Dim answeredCat = answeredRuleCountPerCat(k)
+            Dim coverageCat As Double = answeredCat / CDbl(totalCat)
+            If coverageCat < 1.0 Then
+                scores(k) = Clamp(scores(k) * coverageCat)
+            End If
+        Next
+
+        ' Pilih kategori dominan: skor tertinggi, jika seri ambil coverage tertinggi, jika tetap seri urutan nAch, nAff, nPow
+        Dim bestCat As String = "nAch"
+        Dim bestScore As Double = Double.MinValue
+        Dim bestCoverage As Double = -1
+        For Each k In CategoryKeys
+            Dim score = scores(k)
+            Dim totalCat = Math.Max(1, totalRuleCountPerCat(k))
+            Dim answeredCat = answeredRuleCountPerCat(k)
+            Dim coverageCat As Double = answeredCat / CDbl(totalCat)
+            If score > bestScore Or (score = bestScore And coverageCat > bestCoverage) Then
+                bestCat = k
+                bestScore = score
+                bestCoverage = coverageCat
+            End If
+        Next
 
         Return New MotivationInferenceResult With {
-            .PrimaryCategory = primary,
+            .PrimaryCategory = bestCat,
             .Scores = New ReadOnlyDictionary(Of String, Double)(scores),
             .Evidence = New ReadOnlyDictionary(Of String, List(Of String))(evidence)
         }
@@ -71,7 +98,6 @@ Public Class MotivationInferenceEngine
         Dim key = factKey
         Dim raw As Object = Nothing
         If Not answers.TryGetValue(key, raw) Then
-            ' Allow matching by case-insensitive search when necessary
             Dim match = answers.Keys.FirstOrDefault(Function(k) String.Equals(k, key, StringComparison.OrdinalIgnoreCase))
             If match Is Nothing Then Return 0
             raw = answers(match)
