@@ -975,21 +975,12 @@ Public Class Question_Form
         Dim profile = ExpertEngine.Evaluate(answers, questionBank)
         ExpertEngine.SaveConsultationToDb(username, answers, profile)
 
-        Dim sb As New StringBuilder()
-        sb.AppendLine($"Kategori Dominan: {profile.PrimaryCategory}")
-        sb.AppendLine()
-        sb.AppendLine("Skor Certainty Factor:")
-        For Each kvp In profile.Scores
-            sb.AppendLine($"- {kvp.Key}: {kvp.Value:P1}")
-        Next
-
-        sb.AppendLine()
-        sb.AppendLine("Rekomendasi Judul Skripsi:")
-        For Each rec In profile.Recommendations
-            sb.AppendLine("- " & rec)
-        Next
-
-        MessageBox.Show(sb.ToString(), "Profil Motivasi")
+        ' Tampilkan hasil dengan MotivationProfileDialog (UI modern)
+        Dim rekomList As New List(Of String)(profile.Recommendations)
+        Dim skorDict As New Dictionary(Of String, Double)(profile.Scores)
+        Using dlg As New MotivationProfileDialog(profile.PrimaryCategory, skorDict, rekomList)
+            dlg.ShowDialog(Me)
+        End Using
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
